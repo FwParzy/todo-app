@@ -12,12 +12,23 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
+    <script src="./dist/index.js">
+    </script>
+    <style>
+#list {
+  list-style: none;
+  padding: 0;
+}
+    </style>
   </head>
   <body>
     <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>, Chromium
-    <span id="chrome-version"></span>, and Electron
-    <span id="electron-version"></span>.
+    <ul id="list"> </ul>
+    <h2>hello!!!</h2>
+    <form id="new-task-form">
+      <input type="text" id="new-task-input" value="todo"/>
+      <button type="submit">Add</button>
+    </form>
 
     <!-- You can also require other files to run in this process -->
     <script src="./dist/renderer.js"></script>
