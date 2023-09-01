@@ -1,39 +1,21 @@
-import { v4 as uuidV4 } from "uuid";
+import {app, BrowserWindow} from 'electron';
+import { dirname } from 'path';
 
-type Task = {
-  id: string
-  title: string
-  completed: boolean
-  createdTs: Date
-}
+let mainWindow: BrowserWindow;
 
-const list = document.querySelector<HTMLUListElement>("#list");
-const form = document.getElementById("#new-task-form") as HTMLFormElement;
-const input = document.querySelector<HTMLInputElement>("#new-task-input");
+app.on("ready", createWindows);
 
-form?.addEventListener("submit", e => {
-  e.preventDefault();
+function createWindows():void {
+  mainWindow = new BrowserWindow({
+    width: 900, height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      preload: __dirname + "/preload.js"
+    },
+    show: false
+  });
 
-  if (input?.value == "" || input?.value == null) return null;
-  
-  const newTask: Task = {
-    id: uuidV4(),
-    title: input.value,
-    completed: false,
-    createdTs: new Date(),
-  }
+  mainWindow.loadFile("./index.html");
 
-  addListItem(newTask)
-})
-
-function addListItem(task: Task) {
-  const item = document.createElement("li")
-  const label = document.createElement("label")
-  const checkbox = document.createElement("input")
-  checkbox.type = "checkbox"
-  label.append(checkbox, task.title)
-  item.append(label)
-  list?.append(item)
-  
-
+  mainWindow.on("ready-to-show", () => mainWindow.show())
 }

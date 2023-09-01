@@ -1,14 +1,6 @@
-// All of the Node.js APIs are available in the preload process.
-// It has the same sandbox as a Chrome extension.
-window.addEventListener("DOMContentLoaded", () => {
-    const replaceText = (selector, text) => {
-        const element = document.getElementById(selector);
-        if (element) {
-            element.innerText = text;
-        }
-    };
-    for (const type of ["chrome", "node", "electron"]) {
-        replaceText(`${type}-version`, process.versions[type]);
-    }
+"use strict";
+const { contextBridge } = require('electron');
+const { v4: uuidv4 } = require('uuid');
+contextBridge.exposeInMainWorld('api', {
+    generateUUID: () => uuidv4(),
 });
-//# sourceMappingURL=preload.js.map

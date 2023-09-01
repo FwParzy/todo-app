@@ -2,35 +2,19 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self';">
     <title>Hello World!</title>
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-    <meta
-      http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-    <script src="./dist/index.js">
-    </script>
-    <style>
-#list {
-  list-style: none;
-  padding: 0;
-}
-    </style>
   </head>
   <body>
-    <h1>Hello World!</h1>
+    <h1>Hello from Typescript!</h1>
+
     <ul id="list"> </ul>
-    <h2>hello!!!</h2>
     <form id="new-task-form">
-      <input type="text" id="new-task-input" value="todo"/>
+      <input type="text" id="new-task-input"/>
       <button type="submit">Add</button>
     </form>
 
-    <!-- You can also require other files to run in this process -->
-    <script src="./dist/renderer.js"></script>
+    <script src="dist/todoButton.js"> </script>
+    <script src="dist/renderer/main.js" defer> </script>
   </body>
 </html>
