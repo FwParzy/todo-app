@@ -1,8 +1,13 @@
 import {app, BrowserWindow} from 'electron';
-import { dirname } from 'path';
+import * as path from 'path';
+
+require('electron-reload')(path.join(__dirname, '..', 'src'), {
+  electron: path.join(__dirname, '..', 'node_modules', '.bin', 'electron'),
+  hardResetMethod: 'exit'
+});
+
 
 let mainWindow: BrowserWindow;
-
 app.on("ready", createWindows);
 
 function createWindows():void {
