@@ -9,13 +9,37 @@
   <body>
     <h1>Todo App</h1>
 
-    <ul id="list">Default</ul>
-    <form id="new-task-form">
-      <input type="text" id="new-task-input"/>
-      <button type="submit">Add</button>
+    <div id="headers">
+      <!-- Headers will be added here dynamically -->
+      <div id="tutorialDiv" class="header">
+        <span id="tutorialSpan">This is a Header</span>
+        <ul id='tutorialUl'>
+          <li> <input type="checkbox">
+            You can make notes by clicking on the top bar where the Header name is
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <form id="new-header-form">
+      <input type="text" id="new-header-input" placeholder="New Header"/>
+      <button type="submit">Add Header</button>
     </form>
 
-    <script src="dist/todoButton.js"> </script>
+    <!-- Task Modal -->
+    <div id="taskModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="new-task-form">
+          <input type="text" id="new-task-input" placeholder="Enter task name"/>
+          <button type="submit">Add Task</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="dist/tasks.js"> </script>
+    <script src="dist/taskModals.js"> </script>
+    <script src="dist/headers.js"> </script>
     <script src="dist/renderer/main.js" defer> </script>
   </body>
 </html>

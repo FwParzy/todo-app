@@ -12,7 +12,7 @@ app.on("ready", createWindows);
 
 function createWindows():void {
   mainWindow = new BrowserWindow({
-    width: 900, height: 600,
+    width: 900, height: 900,
     webPreferences: {
       nodeIntegration: true,
       preload: __dirname + "/preload.js"
