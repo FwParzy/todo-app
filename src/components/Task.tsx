@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import NewTask from "./NewTask";
+import TaskEdit from "./TaskEdit";
 
 interface Props {
   task: any;
@@ -40,7 +40,7 @@ const Task = ({ task, toggleTask, editTaskName }: Props) => {
       <span onClick={handleTaskPopup}>{task.name}</span>
 
       {editTaskVisibility &&
-        <NewTask
+        <TaskEdit
           inputRef={taskNameRef}
           onCancel={handleTaskPopup}
           onOk={handleEditTask}

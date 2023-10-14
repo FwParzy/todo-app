@@ -6,7 +6,7 @@ interface Props {
   onOk: () => void;
 };
 
-const NewTask = ({ inputRef, onCancel, onOk }: Props) => {
+const TaskEdit = ({ inputRef, onCancel, onOk }: Props) => {
 
   return (
     <div>
@@ -24,4 +24,4 @@ const NewTask = ({ inputRef, onCancel, onOk }: Props) => {
   )
 }
 
-export default NewTask
+export default TaskEdit

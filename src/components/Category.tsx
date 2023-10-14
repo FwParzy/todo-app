@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { TaskType } from '../types/taskTypes';
 
-import NewTask from "./NewTask";
+import TaskEdit from "./TaskEdit";
 import TaskList from "./TaskList";
 
 interface Props {
@@ -69,7 +69,7 @@ const Category = ({ category }: Props) => {
         editTaskName={handleEditTaskName}
       />
       {addTaskVisibility &&
-        <NewTask
+        <TaskEdit
           inputRef={taskNameRef}
           onCancel={handleTaskPopup}
           onOk={handleAddTask}
