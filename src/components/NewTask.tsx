@@ -1,12 +1,12 @@
 import { handleEnterKey } from '../utils/keyboardUtils';
 
-type Props = {
+interface Props {
   inputRef: React.RefObject<HTMLInputElement>;
   onCancel: () => void;
-  onAdd: () => void;
+  onOk: () => void;
 };
 
-const NewTask = ({ inputRef, onCancel, onAdd }: Props) => {
+const NewTask = ({ inputRef, onCancel, onOk }: Props) => {
 
   return (
     <div>
@@ -15,11 +15,11 @@ const NewTask = ({ inputRef, onCancel, onAdd }: Props) => {
         type="text"
         name="inputCategory"
         placeholder="Enter Task"
-        onKeyDown={(e) => handleEnterKey(e, onAdd)}
+        onKeyDown={(e) => handleEnterKey(e, onOk)}
         autoFocus
       />
       <button onClick={onCancel}>Cancel</button>
-      <button onClick={onAdd}>Add</button>
+      <button onClick={onOk}>Ok</button>
     </div>
   )
 }

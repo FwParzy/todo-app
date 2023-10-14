@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import { TaskType } from '../types/taskTypes';
 
 import NewTask from "./NewTask";
 import TaskList from "./TaskList";
@@ -7,7 +8,6 @@ import TaskList from "./TaskList";
 interface Props {
   category: any;
 }
-
 
 const LOCAL_STORAGE_KEY = 'todoApp.tasks'
 
@@ -25,7 +25,7 @@ const Category = ({ category }: Props) => {
   };
 
   const taskNameRef = useRef<HTMLInputElement>(null)
-  const [tasks, setTasks] = useState(initializeTasks);
+  const [tasks, setTasks] = useState<TaskType[]>(initializeTasks);
 
   // Save to local storage
   useEffect(() => {
@@ -33,15 +33,21 @@ const Category = ({ category }: Props) => {
   }, [tasks])
 
   function handleAddTask() {
-    console.log("Handling")
     const name = taskNameRef.current?.value;
     console.log(name)
     if (!name) return
-    setTasks(prevTasks => {
-      return [...prevTasks, { id: uuidv4(), name: name, completed: false }]
-      // Todo Add a category prop to the task object
+    setTasks((prevTasks: TaskType[]) => {
+      return [...prevTasks, { id: uuidv4(), name: name, completed: false, categoryId: category.id }]
     })
     taskNameRef.current.value = ''
+  }
+
+  function handleEditTaskName(id: string, newName: string) {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === id ? { ...task, name: newName } : task
+      )
+    );
   }
 
   function toggleTask(id: any) {
@@ -56,12 +62,17 @@ const Category = ({ category }: Props) => {
       <h2 onClick={handleTaskPopup}>
         {category.name}
       </h2>
-      <TaskList tasks={tasks} toggleTask={toggleTask} />
-      { addTaskVisibility &&
+      <TaskList
+        tasks={tasks}
+        toggleTask={toggleTask}
+        category={category.id}
+        editTaskName={handleEditTaskName}
+      />
+      {addTaskVisibility &&
         <NewTask
           inputRef={taskNameRef}
           onCancel={handleTaskPopup}
-          onAdd={handleAddTask}
+          onOk={handleAddTask}
         />
       }
     </div>
