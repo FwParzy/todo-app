@@ -5,13 +5,13 @@ interface Props {
   tasks: TaskType[];
   toggleTask: any;
   category: string;
-  editTaskName: (id: string, name: string) => void;
+  editTask: (updatedTask: TaskType) => void;
 }
 
-const TaskList = ({ tasks, toggleTask, category, editTaskName }: Props) => {
+const TaskList = ({ tasks, toggleTask, category, editTask }: Props) => {
   return (
     tasks.filter(task => category === task.categoryId).map(task => {
-      return <Task key={task.id} toggleTask={toggleTask} task={task} editTaskName={editTaskName} />
+      return <Task key={task.id} toggleTask={toggleTask} task={task} editTask={editTask} />
     })
   )
 }

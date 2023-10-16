@@ -4,6 +4,8 @@ import { TaskType } from '../types/taskTypes';
 
 import TaskEdit from "./TaskEdit";
 import TaskList from "./TaskList";
+import { checkDayChange, getCurrentTimestamp, processTasks } from "../utils/timeUtils";
+import { handleEnterKey } from "../utils/keyboardUtils";
 
 interface Props {
   category: any;
@@ -37,15 +39,24 @@ const Category = ({ category }: Props) => {
     console.log(name)
     if (!name) return
     setTasks((prevTasks: TaskType[]) => {
-      return [...prevTasks, { id: uuidv4(), name: name, completed: false, categoryId: category.id }]
+      return [...prevTasks, {
+        id: uuidv4(),
+        categoryId: category.id,
+        name: name,
+        completed: false,
+        createTs: getCurrentTimestamp(),
+        cancelTs: null,
+        deleteTs: null
+      }]
     })
     taskNameRef.current.value = ''
+    console.log(getCurrentTimestamp())
   }
 
-  function handleEditTaskName(id: string, newName: string) {
+  function handleEditTask(updatedTask: TaskType) {
     setTasks(prevTasks =>
       prevTasks.map(task =>
-        task.id === id ? { ...task, name: newName } : task
+        task.id === updatedTask.id ? { ...updatedTask } : task,
       )
     );
   }
@@ -54,6 +65,8 @@ const Category = ({ category }: Props) => {
     const newTasks = [...tasks]
     const task = newTasks.find(task => task.id === id)
     task.completed = !task.completed
+    task.cancelTs = getCurrentTimestamp()
+    if (!task.completed) task.cancelTs = null
     setTasks(newTasks)
   }
 
@@ -66,7 +79,7 @@ const Category = ({ category }: Props) => {
         tasks={tasks}
         toggleTask={toggleTask}
         category={category.id}
-        editTaskName={handleEditTaskName}
+        editTask={handleEditTask}
       />
       {addTaskVisibility &&
         <TaskEdit

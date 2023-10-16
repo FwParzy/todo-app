@@ -5,9 +5,10 @@ interface Props {
   inputRef: React.RefObject<HTMLInputElement>;
   onCancel: () => void;
   onOk: () => void;
+  onDelete?: () => void;
 };
 
-const TaskEdit = ({ inputRef, onCancel, onOk }: Props) => {
+const TaskEdit = ({ inputRef, onCancel, onOk, onDelete }: Props) => {
 
   useEffect(() => {
     const openTasks = document.querySelectorAll('.task_input');
@@ -32,7 +33,9 @@ const TaskEdit = ({ inputRef, onCancel, onOk }: Props) => {
       />
       <button onClick={onCancel}>Cancel</button>
       <button onClick={onOk} className='task_ok'>Ok</button>
-      <button className='task_delete'>Delete</button>
+      {onDelete &&
+        <button onClick={onDelete} className='task_delete'>Delete</button>
+      }
     </div>
   )
 }
