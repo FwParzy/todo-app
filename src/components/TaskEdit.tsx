@@ -1,14 +1,17 @@
 import { useEffect } from 'react';
 import { handleEnterKey } from '../utils/keyboardUtils';
+import { CategoryDropdown } from './CategoryDropdown';
 
 interface Props {
   inputRef: React.RefObject<HTMLInputElement>;
   onCancel: () => void;
   onOk: () => void;
   onDelete?: () => void;
+  currentCategory: string;
+  onCategoryChange?: (categoryId: string) => void;
 };
 
-const TaskEdit = ({ inputRef, onCancel, onOk, onDelete }: Props) => {
+const TaskEdit = ({ inputRef, currentCategory, onCancel, onOk, onDelete, onCategoryChange }: Props) => {
 
   useEffect(() => {
     const openTasks = document.querySelectorAll('.task_input');
@@ -20,8 +23,15 @@ const TaskEdit = ({ inputRef, onCancel, onOk, onDelete }: Props) => {
     }
   }, []);
 
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+    // Guard for CategoryDropdown
+    if (event.currentTarget.contains(event.relatedTarget)) return;
+
+    onCancel();
+  };
+
   return (
-    <div className='task_edit'>
+    <div className='task_edit' onBlur={handleBlur}>
       <input
         ref={inputRef}
         type="text"
@@ -35,6 +45,13 @@ const TaskEdit = ({ inputRef, onCancel, onOk, onDelete }: Props) => {
       <button onClick={onOk} className='task_ok'>Ok</button>
       {onDelete &&
         <button onClick={onDelete} className='task_delete'>Delete</button>
+      }
+      {onCategoryChange &&
+        <CategoryDropdown
+          onCategoryChange={onCategoryChange}
+          currentCategory={currentCategory}
+          onOk={onOk}
+        />
       }
     </div>
   )

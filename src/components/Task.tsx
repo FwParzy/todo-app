@@ -4,7 +4,7 @@ import { getCurrentTimestamp, setTaskDeleteTs } from "../utils/timeUtils";
 import { TaskType } from "../types/taskTypes";
 
 interface Props {
-  task: any;
+  task: TaskType;
   toggleTask: any;
   editTask: (updatedTask: TaskType) => void;
 }
@@ -43,6 +43,7 @@ const Task = ({ task: initialTask, toggleTask, editTask }: Props) => {
 
   const taskNameRef = useRef<HTMLInputElement>(null)
   const [editTaskVisibility, setEditTaskVisibility] = useState(false)
+  const [changedCategory, setChangedCategory] = useState(task.categoryId)
 
 
   // This sets the ref to the name for Task editing
@@ -63,16 +64,24 @@ const Task = ({ task: initialTask, toggleTask, editTask }: Props) => {
     setEditTaskVisibility(!editTaskVisibility)
   }
 
-  function handleEditTaskName() {
+  function handleEditTask() {
     const name = taskNameRef.current?.value;
     if (!name) return
+    if (!changedCategory) return
+    console.log(changedCategory)
 
     const updatedTask = {
       ...task,
-      name: name
+      name: name,
+      categoryId: changedCategory
     };
 
     editTask(updatedTask)
+
+    // I know this isnt very react of me, but i am stupid and spent 4 hours
+    // trying to get categories to update from here. This is a compromise
+    if(task.categoryId !== updatedTask.categoryId) window.location.reload();
+
     handleTaskPopup()
   }
 
@@ -91,6 +100,10 @@ const Task = ({ task: initialTask, toggleTask, editTask }: Props) => {
     handleTaskPopup()
   }
 
+  function handleCategoryChange(selectedCategory: string) {
+    setChangedCategory(selectedCategory)
+  }
+
   function handleTaskClick() {
     toggleTask(task.id)
   }
@@ -105,8 +118,10 @@ const Task = ({ task: initialTask, toggleTask, editTask }: Props) => {
           <TaskEdit
             inputRef={taskNameRef}
             onCancel={handleTaskPopup}
-            onOk={handleEditTaskName}
+            onOk={handleEditTask}
             onDelete={handleDeleteTask}
+            currentCategory={task.categoryId}
+            onCategoryChange={handleCategoryChange}
           />
         }
       </div>

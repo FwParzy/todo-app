@@ -4,8 +4,7 @@ import { TaskType } from '../types/taskTypes';
 
 import TaskEdit from "./TaskEdit";
 import TaskList from "./TaskList";
-import { checkDayChange, getCurrentTimestamp, processTasks } from "../utils/timeUtils";
-import { handleEnterKey } from "../utils/keyboardUtils";
+import { getCurrentTimestamp } from "../utils/timeUtils";
 
 interface Props {
   category: any;
@@ -34,10 +33,17 @@ const Category = ({ category }: Props) => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tasks));
   }, [tasks])
 
+  const refreshTasks = () => {
+    console.log("refreshing tasks")
+    const updatedTasks = initializeTasks();
+    setTasks(updatedTasks);
+  }
+
   function handleAddTask() {
     const name = taskNameRef.current?.value;
-    console.log(name)
     if (!name) return
+
+    refreshTasks()
     setTasks((prevTasks: TaskType[]) => {
       return [...prevTasks, {
         id: uuidv4(),
@@ -50,7 +56,6 @@ const Category = ({ category }: Props) => {
       }]
     })
     taskNameRef.current.value = ''
-    console.log(getCurrentTimestamp())
   }
 
   function handleEditTask(updatedTask: TaskType) {
@@ -75,19 +80,21 @@ const Category = ({ category }: Props) => {
       <h2 onClick={handleTaskPopup}>
         {category.name}
       </h2>
+      {addTaskVisibility &&
+        <TaskEdit
+          inputRef={taskNameRef}
+          onCancel={handleTaskPopup}
+          onOk={handleAddTask}
+          currentCategory={category.id}
+        />
+      }
+
       <TaskList
         tasks={tasks}
         toggleTask={toggleTask}
         category={category.id}
         editTask={handleEditTask}
       />
-      {addTaskVisibility &&
-        <TaskEdit
-          inputRef={taskNameRef}
-          onCancel={handleTaskPopup}
-          onOk={handleAddTask}
-        />
-      }
     </div>
   )
 }
