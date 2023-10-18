@@ -68,7 +68,6 @@ const Task = ({ task: initialTask, toggleTask, editTask }: Props) => {
     const name = taskNameRef.current?.value;
     if (!name) return
     if (!changedCategory) return
-    console.log(changedCategory)
 
     const updatedTask = {
       ...task,
@@ -112,17 +111,23 @@ const Task = ({ task: initialTask, toggleTask, editTask }: Props) => {
     task.deleteTs === null && (
       <div>
         <input type="checkbox" checked={task.completed} onChange={handleTaskClick} />
-        <span onClick={handleTaskPopup}>{task.name}</span>
+
+        {!editTaskVisibility &&
+          <span onClick={handleTaskPopup}>{task.name}</span>
+        }
 
         {editTaskVisibility &&
-          <TaskEdit
-            inputRef={taskNameRef}
-            onCancel={handleTaskPopup}
-            onOk={handleEditTask}
-            onDelete={handleDeleteTask}
-            currentCategory={task.categoryId}
-            onCategoryChange={handleCategoryChange}
-          />
+          <>
+            <span>{task.name}</span>
+            <TaskEdit
+              inputRef={taskNameRef}
+              onCancel={handleTaskPopup}
+              onOk={handleEditTask}
+              onDelete={handleDeleteTask}
+              currentCategory={task.categoryId}
+              onCategoryChange={handleCategoryChange}
+            />
+          </>
         }
       </div>
     )

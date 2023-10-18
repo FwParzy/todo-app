@@ -14,10 +14,10 @@ const LOCAL_STORAGE_KEY = 'todoApp.tasks'
 
 const Category = ({ category }: Props) => {
 
-  const [addTaskVisibility, setAddTaskVisibility] = useState(false)
+  const [isTaskEditVisible, setIsTaskEditVisible] = useState(false)
 
   function handleTaskPopup() {
-    setAddTaskVisibility(!addTaskVisibility)
+    setIsTaskEditVisible(!isTaskEditVisible)
   }
 
   const initializeTasks = () => {
@@ -77,16 +77,23 @@ const Category = ({ category }: Props) => {
 
   return (
     <div>
-      <h2 onClick={handleTaskPopup}>
-        {category.name}
-      </h2>
-      {addTaskVisibility &&
-        <TaskEdit
-          inputRef={taskNameRef}
-          onCancel={handleTaskPopup}
-          onOk={handleAddTask}
-          currentCategory={category.id}
-        />
+      {isTaskEditVisible &&
+        <>
+          <h2>
+            {category.name}
+          </h2>
+          <TaskEdit
+            inputRef={taskNameRef}
+            onCancel={handleTaskPopup}
+            onOk={handleAddTask}
+            currentCategory={category.id}
+          />
+        </>
+      }
+      {!isTaskEditVisible &&
+        <h2 onClick={handleTaskPopup}>
+          {category.name}
+        </h2>
       }
 
       <TaskList
