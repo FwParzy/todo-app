@@ -28,7 +28,6 @@ const Category = ({ category, onUpdateCategory }: Props) => {
     setIsCategoryEditVisible(!isCategoryEditVisible)
   }
 
-
   const initializeTasks = () => {
     const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
     return storedData ? JSON.parse(storedData) : [];
@@ -114,7 +113,6 @@ const Category = ({ category, onUpdateCategory }: Props) => {
     console.log("handling Delete")
     const deleted = getCurrentTimestamp()
     const canceled = getCurrentTimestamp()
-
 
     const updatedCategory = {
       ...category,
