@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { handleEnterKey } from '../utils/keyboardUtils';
 import { CategoryDropdown } from './CategoryDropdown';
 
@@ -12,16 +11,6 @@ interface Props {
 };
 
 const TaskEdit = ({ inputRef, currentCategory, onCancel, onOk, onDelete, onCategoryChange }: Props) => {
-
-  useEffect(() => {
-    const openTasks = document.querySelectorAll('.task_input');
-    if (openTasks.length === 2) {
-      const task1Name = (openTasks[0] as HTMLInputElement)?.value;
-      const task2Name = (openTasks[1] as HTMLInputElement)?.value;
-
-      console.log(`Doing things to ${task1Name} and ${task2Name}`);
-    }
-  }, []);
 
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     // Guard for CategoryDropdown

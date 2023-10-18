@@ -12,7 +12,7 @@ export const CategoryDropdown = ({ currentCategory, onCategoryChange, onOk }: Pr
 
   const [selectedCategory, setSelectedCategory] = useState(currentCategory);
   const storedCategories = JSON.parse(localStorage.getItem('todoApp.categories'));
-  
+
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newCategoryId = event.target.value;
     console.log("newCatID " + newCategoryId)
