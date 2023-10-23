@@ -121,8 +121,14 @@ const Category = ({ category, onUpdateCategory }: Props) => {
     };
     onUpdateCategory(updatedCategory);
     setIsCategoryEditVisible(false);
-    // TODO will have to set delete TS for all tasks with the same catID
 
+    setTasks(prevTasks => 
+      prevTasks.map(task => 
+        task.categoryId === updatedCategory.id 
+          ? { ...task, cancelTs: canceled, deleteTs: deleted }
+          : task
+      )
+    );
   }
 
   // This sets the ref to the name for Category editing
