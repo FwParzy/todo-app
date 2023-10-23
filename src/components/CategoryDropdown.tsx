@@ -12,7 +12,8 @@ export const CategoryDropdown = ({ currentCategory, onCategoryChange, onOk }: Pr
 
   const [selectedCategory, setSelectedCategory] = useState(currentCategory);
   const storedCategories = JSON.parse(localStorage.getItem('todoApp.categories'));
-  
+  const usedCategories = storedCategories.filter((categoty: CategoryType) => (categoty.deleteTs === null))
+
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newCategoryId = event.target.value;
     console.log("newCatID " + newCategoryId)
@@ -27,7 +28,7 @@ export const CategoryDropdown = ({ currentCategory, onCategoryChange, onOk }: Pr
         onChange={handleChange}
         onKeyDown={(e) => handleEnterKey(e as React.KeyboardEvent<HTMLSelectElement>, onOk)}
       >
-        {storedCategories.map((category: CategoryType) => (
+        {usedCategories.map((category: CategoryType) => (
           <option
             key={category.id}
             value={category.id}

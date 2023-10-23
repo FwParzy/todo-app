@@ -79,7 +79,7 @@ const Task = ({ task: initialTask, toggleTask, editTask }: Props) => {
 
     // I know this isnt very react of me, but i am stupid and spent 4 hours
     // trying to get categories to update from here. This is a compromise
-    if(task.categoryId !== updatedTask.categoryId) window.location.reload();
+    if (task.categoryId !== updatedTask.categoryId) window.location.reload();
 
     handleTaskPopup()
   }
@@ -110,15 +110,15 @@ const Task = ({ task: initialTask, toggleTask, editTask }: Props) => {
   return (
     task.deleteTs === null && (
       <div>
-        <input type="checkbox" checked={task.completed} onChange={handleTaskClick} />
-
         {!editTaskVisibility &&
-          <span onClick={handleTaskPopup}>{task.name}</span>
+          <>
+            <input type="checkbox" checked={task.completed} onChange={handleTaskClick} />
+            <span onClick={handleTaskPopup}>{task.name}</span>
+          </>
         }
 
         {editTaskVisibility &&
           <>
-            <span>{task.name}</span>
             <TaskEdit
               inputRef={taskNameRef}
               onCancel={handleTaskPopup}

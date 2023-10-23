@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { handleEnterKey } from './utils/keyboardUtils';
 import CategoryList from './components/CategoryList';
+import { CategoryType } from './types/categoryType';
+import { getCurrentTimestamp } from './utils/timeUtils';
 
 const LOCAL_STORAGE_KEY = 'todoApp.categories'
 function App() {
@@ -19,18 +21,43 @@ function App() {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(categories));
   }, [categories])
 
+  const refreshCategories = () => {
+    console.log("refreshing tasks")
+    const updatedCategories = initializeCategories();
+    setCategories(updatedCategories);
+  }
+
   function handleAddCategory() {
     const name = categoryNameRef.current?.value;
     if (!name) return
-    setCategories(prevCategories => {
-      return [...prevCategories, { id: uuidv4(), name: name }]
+
+    refreshCategories()
+    setCategories((prevCategories: CategoryType[]) => {
+      return [...prevCategories, {
+        id: uuidv4(),
+        name: name,
+        createTs: getCurrentTimestamp(),
+        cancelTs: null,
+        deleteTs: null
+      }]
     })
     categoryNameRef.current.value = ''
   }
 
+  function handleUpdateCategory(updatedCategory: CategoryType) {
+    setCategories((prevCategories: CategoryType[]) => {
+      return prevCategories.map(cat =>
+        cat.id === updatedCategory.id ? updatedCategory : cat
+      );
+    });
+  }
+
   return (
     <div>
-      <CategoryList categories={categories} />
+      <CategoryList
+        categories={categories}
+        onUpdateCategory={handleUpdateCategory}
+      />
       <input
         ref={categoryNameRef}
         type="text"
