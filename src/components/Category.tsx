@@ -122,9 +122,9 @@ const Category = ({ category, onUpdateCategory }: Props) => {
     onUpdateCategory(updatedCategory);
     setIsCategoryEditVisible(false);
 
-    setTasks(prevTasks => 
-      prevTasks.map(task => 
-        task.categoryId === updatedCategory.id 
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.categoryId === updatedCategory.id
           ? { ...task, cancelTs: canceled, deleteTs: deleted }
           : task
       )
