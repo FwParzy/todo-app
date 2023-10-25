@@ -3,16 +3,17 @@ import ReactDOM from 'react-dom/client'
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles.css"
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-// import App from './App.tsx'
 import Login from './Login.tsx';
 import Register from './Register.tsx';
+import App from './App.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<Login />}/>
-                <Route path='/' element={<Register />}/>
+                <Route path='/login' element={<Login />}></Route>
+                <Route path='/register' element={<Register />}></Route>
+                <Route path='/' element={<App />}></Route>
             </Routes>
         </BrowserRouter>
   </React.StrictMode>,
