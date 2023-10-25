@@ -36,13 +36,6 @@ const Register = () => {
       || validationErrors.passwordConfirm !== '') {
       return;
     }
-
-    // axios.post('http://localhost:8081/api/auth/register', values)
-    //   .then(res => {
-    //     console.log(res)
-    //     navigate('/')
-    //   })
-    //   .catch(setErr([err.response.data.message]));
     try {
       await axios.post('http://localhost:8081/api/auth/register', values);
       navigate('/login');
@@ -87,7 +80,7 @@ const Register = () => {
           </div>
           <button type="submit" className="btn btn-success w-100 mb-1"><strong>Sign up</strong></button>
           <span className="text-danger">{errors.api}</span>
-          <Link to="/"
+          <Link to="/login"
             className="btn btn-default border w-100 bg-light">Log in</Link>
         </form>
       </div>

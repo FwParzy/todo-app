@@ -1,16 +1,16 @@
 export function LoginValidation(values) {
   let errors = {
-    email: '',
-    password: ''
+    username: '',
+    password: '',
+    api:''
   }
 
-  const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
   const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
-  if (!values.email) {
-    errors.email = "Email is required";
-  } else if (!emailPattern.test(values.email)) {
-    errors.email = "Email address is invalid";
+  if (!values.username) {
+    errors.username = "Username is required";
+  } else if (values.username.length < 3) {
+    errors.username = "Username must be at least 3 characters long";
   }
 
   if (!values.password) {

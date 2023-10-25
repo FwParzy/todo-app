@@ -6,16 +6,19 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './Login.tsx';
 import Register from './Register.tsx';
 import App from './App.tsx';
+import { AuthContextProvider } from './context/authContext';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-        <BrowserRouter>
-            <Routes>
-                <Route path='/login' element={<Login />}></Route>
-                <Route path='/register' element={<Register />}></Route>
-                <Route path='/' element={<App />}></Route>
-            </Routes>
-        </BrowserRouter>
+    <React.StrictMode>
+        <AuthContextProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path='/login' element={<Login />}></Route>
+                    <Route path='/register' element={<Register />}></Route>
+                    <Route path='/' element={<App />}></Route>
+                </Routes>
+            </BrowserRouter>
+        </AuthContextProvider>
   </React.StrictMode>,
 )
 

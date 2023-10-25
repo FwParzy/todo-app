@@ -1,15 +1,20 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginValidation } from "./Validations";
+import { AuthContext } from './context/authContext';
+import axios from "axios";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
   const [errors, setErrors] = useState({
-    email: '',
-    password: ''
+    username: '',
+    password: '',
+    api: ''
 
   })
   const [values, setValues] = useState({
-    email: '',
+    username: '',
     password: ''
   })
 
@@ -18,10 +23,28 @@ const Login = () => {
     setValues(prev => ({...prev, [name]: value}))
   }
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = LoginValidation(values);
     setErrors(validationErrors);
+
+      console.log('before guard')
+    if (validationErrors.username !== '' || validationErrors.password !== '') return;
+      console.log('after guard')
+    try {
+      console.log('inside try')
+      await axios.post('http://localhost:8081/api/auth/login', values);
+      console.log('post post')
+      await login(values);
+      console.log('post login')
+      navigate('/');
+    } catch (err) {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        api: err.response.data.message
+      }));
+      console.log(err.response.data.message)
+    }
   }
 
   return (
@@ -30,10 +53,10 @@ const Login = () => {
         <h2>Log In</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="email"><strong>Email</strong></label>
-            <input type="email"  placeholder="Enter email" onChange={handleInput} name="email"
+            <label htmlFor="username"><strong>Username</strong></label>
+            <input type="text" placeholder="Enter username" onChange={handleInput} name="username"
               className="form-control rounded-0"/>
-            {errors.email && <span className="text-danger">{errors.email}</span>}
+            {errors.username && <span className="text-danger">{errors.username}</span>}
           </div>
           <div className="mb-3">
             <label htmlFor="password"><strong>Password</strong> </label>
@@ -42,7 +65,7 @@ const Login = () => {
             {errors.password && <span className="text-danger">{errors.password}</span>}
           </div>
           <button type="submit" className="btn btn-success w-100"><strong>Log in</strong></button>
-          <p>Ben Yes Ben</p>
+          <span className="text-danger">{errors.api}</span>
           <Link to="/register" className="btn btn-default border w-100 bg-light">Register</Link>
         </form>
       </div>
