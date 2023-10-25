@@ -7,7 +7,8 @@ export const register = (req, res) => {
   const q = 'SELECT * FROM users WHERE email = ? OR username = ?';
 
   db.query(q, [req.body.email, req.body.username], (err, data) => {
-    if (err) return res.status(500).json({ message: 'Server error' });
+        console.error("Database error:", err);
+    if (err) return res.status(500).json({ message: 'Server error: Checking Existance' });
     if (data.length)
       return res.status(409).json({ message: 'User already exists' });
 
@@ -19,7 +20,7 @@ export const register = (req, res) => {
     const values = [req.body.username, req.body.email, hash];
 
     db.query(q, values, (err) => {
-      if (err) return res.status(500).json({ message: 'Server error' });
+      if (err) return res.status(500).json({ message: 'Server error: Inserting User' });
       return res.status(200).json({ message: 'User was created.' });
     });
   });
@@ -33,6 +34,11 @@ export const login = (req, res) => {
     if (err) return res.status(500).json({ message: 'Server error' });
     if (data.length === 0)
       return res.status(404).json({ message: 'User not found' });
+
+    // Check if user's account is cancelled
+    if (data[0].cancelTs !== null) {
+      return res.status(403).json({ message: 'Your account has been deleted.' });
+    }
 
     // Check password
     const isPassCorrect = bcrypt.compareSync(

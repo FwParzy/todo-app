@@ -28,15 +28,11 @@ const Login = () => {
     const validationErrors = LoginValidation(values);
     setErrors(validationErrors);
 
-      console.log('before guard')
     if (validationErrors.username !== '' || validationErrors.password !== '') return;
-      console.log('after guard')
+
     try {
-      console.log('inside try')
       await axios.post('http://localhost:8081/api/auth/login', values);
-      console.log('post post')
       await login(values);
-      console.log('post login')
       navigate('/');
     } catch (err) {
       setErrors(prevErrors => ({
@@ -64,7 +60,7 @@ const Login = () => {
               className="form-control rounded-0"/>
             {errors.password && <span className="text-danger">{errors.password}</span>}
           </div>
-          <button type="submit" className="btn btn-success w-100"><strong>Log in</strong></button>
+          <button type="submit" className="btn btn-success w-100 mb-1"><strong>Log in</strong></button>
           <span className="text-danger">{errors.api}</span>
           <Link to="/register" className="btn btn-default border w-100 bg-light">Register</Link>
         </form>

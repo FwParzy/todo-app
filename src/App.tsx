@@ -5,11 +5,13 @@ import CategoryList from './components/CategoryList';
 import { CategoryType } from './types/categoryType';
 import { getCurrentTimestamp } from './utils/timeUtils';
 import { AuthContext } from './context/authContext';
+import { useNavigate } from 'react-router-dom';
 
 const LOCAL_STORAGE_KEY = 'todoApp.categories'
 function App() {
 
   const { currentUser, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
   const categoryNameRef = useRef<HTMLInputElement>(null)
 
   const initializeCategories = () => {
@@ -69,6 +71,12 @@ function App() {
         autoFocus
       />
       <button onClick={handleAddCategory}>Add Category</button>
+      <button type="button"    
+        onClick={() => {
+          logout();
+          navigate('/login');
+        }}
+      >Logout</button>
     </div>
   )
 }
