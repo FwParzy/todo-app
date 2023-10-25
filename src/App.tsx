@@ -71,7 +71,7 @@ function App() {
         autoFocus
       />
       <button onClick={handleAddCategory}>Add Category</button>
-      <button type="button"    
+      <button type="button"
         onClick={() => {
           logout();
           navigate('/login');

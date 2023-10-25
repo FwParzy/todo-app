@@ -1,8 +1,8 @@
-export function LoginValidation(values) {
+export function LoginValidation(values: any) {
   let errors = {
     username: '',
     password: '',
-    api:''
+    api: ''
   }
 
   const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
@@ -18,17 +18,17 @@ export function LoginValidation(values) {
   } else if (!passwordPattern.test(values.password)) {
     errors.password = "Password must be at least 8 characters, contain one uppercase, one lowercase, and one number";
   }
-  
+
   return errors
 }
 
-export function RegistrationValidation(values) {
+export function RegistrationValidation(values: any) {
   let errors = {
     username: '',
     email: '',
     password: '',
     passwordConfirm: '',
-    api:''
+    api: ''
   };
 
   // Patterns

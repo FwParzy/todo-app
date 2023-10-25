@@ -7,7 +7,7 @@ export const register = (req, res) => {
   const q = 'SELECT * FROM users WHERE email = ? OR username = ?';
 
   db.query(q, [req.body.email, req.body.username], (err, data) => {
-        console.error("Database error:", err);
+    console.error("Database error:", err);
     if (err) return res.status(500).json({ message: 'Server error: Checking Existance' });
     if (data.length)
       return res.status(409).json({ message: 'User already exists' });
@@ -52,22 +52,21 @@ export const login = (req, res) => {
     const token = jwt.sign({ id: data[0].id }, 'jwtKey');
     const { password, ...other } = data[0];
 
-    res
-      .cookie('access_token', token, {
-        httpOnly: true,
-        sameSite: 'None',
-        secure: true,
-      })
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      sameSite: 'None',
+      secure: true,
+    })
       .status(200)
       .json(other);
   });
 };
 
-export const logout = (req, res) => {
+export const logout = (_req, res) => {
   res.clearCookie('access_token', {
-      sameSite: 'None',
-      secure: true,
-    })
+    sameSite: 'None',
+    secure: true,
+  })
     .status(200)
     .json({ message: 'User has been logged out' });
 };

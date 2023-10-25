@@ -11,7 +11,6 @@ const Login = () => {
     username: '',
     password: '',
     api: ''
-
   })
   const [values, setValues] = useState({
     username: '',
@@ -20,7 +19,7 @@ const Login = () => {
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setValues(prev => ({...prev, [name]: value}))
+    setValues(prev => ({ ...prev, [name]: value }))
   }
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -39,7 +38,6 @@ const Login = () => {
         ...prevErrors,
         api: err.response.data.message
       }));
-      console.log(err.response.data.message)
     }
   }
 
@@ -51,13 +49,13 @@ const Login = () => {
           <div className="mb-3">
             <label htmlFor="username"><strong>Username</strong></label>
             <input type="text" placeholder="Enter username" onChange={handleInput} name="username"
-              className="form-control rounded-0"/>
+              className="form-control rounded-0" />
             {errors.username && <span className="text-danger">{errors.username}</span>}
           </div>
           <div className="mb-3">
             <label htmlFor="password"><strong>Password</strong> </label>
-            <input type="password"  placeholder="Enter password" onChange={handleInput} name="password"
-              className="form-control rounded-0"/>
+            <input type="password" placeholder="Enter password" onChange={handleInput} name="password"
+              className="form-control rounded-0" />
             {errors.password && <span className="text-danger">{errors.password}</span>}
           </div>
           <button type="submit" className="btn btn-success w-100 mb-1"><strong>Log in</strong></button>

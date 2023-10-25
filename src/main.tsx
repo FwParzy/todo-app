@@ -19,7 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 </Routes>
             </BrowserRouter>
         </AuthContextProvider>
-  </React.StrictMode>,
+    </React.StrictMode>,
 )
 
 // Remove Preload scripts loading
