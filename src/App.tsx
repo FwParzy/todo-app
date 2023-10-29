@@ -14,6 +14,13 @@ function App() {
   const navigate = useNavigate();
   const categoryNameRef = useRef<HTMLInputElement>(null)
 
+  // Redirect if not logged in
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/login');
+    }
+  }, [currentUser, navigate]);
+
   const initializeCategories = () => {
     const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
     return storedData ? JSON.parse(storedData) : [];
@@ -77,6 +84,7 @@ function App() {
           navigate('/login');
         }}
       >Logout</button>
+      {currentUser &&<button type="button" onClick={() => navigate('/editUser')}> Edit {currentUser.username}</button>}
     </div>
   )
 }

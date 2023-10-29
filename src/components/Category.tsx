@@ -159,7 +159,7 @@ const Category = ({ category, onUpdateCategory }: Props) => {
           </>
         }
         {isCategoryEditVisible &&
-          <div className='task_edit' onBlur={handleBlur}>
+          <div className='category_edit' onBlur={handleBlur}>
             <input
               ref={catEditRef}
               type="text"

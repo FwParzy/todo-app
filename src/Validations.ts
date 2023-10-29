@@ -66,3 +66,44 @@ export function RegistrationValidation(values: any) {
   return errors;
 }
 
+export function EditUserValidation(values: any) {
+  let errors = {
+    username: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
+    api: ''
+  };
+
+  // Patterns
+  const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+  // Validations for username
+  if (!values.username) {
+    errors.username = "Username is required";
+  } else if (values.username.length < 3) {
+    errors.username = "Username must be at least 3 characters long";
+  }
+
+  // Validations for email
+  if (!values.email) {
+    errors.email = "Email is required";
+  } else if (!emailPattern.test(values.email)) {
+    errors.email = "Email address is invalid";
+  }
+
+  // Validations for password
+  if (values.password && !passwordPattern.test(values.password)) {
+    errors.password = "Password must be at least 8 characters, contain one uppercase, one lowercase, and one number";
+  }
+
+  // Validations for confirm password
+  if (values.password && !values.passwordConfirm) {
+    errors.passwordConfirm = "Password confirmation is required";
+  } else if (values.password !== values.passwordConfirm) {
+    errors.passwordConfirm = "Passwords do not match";
+  }
+
+  return errors;
+}
