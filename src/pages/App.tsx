@@ -1,10 +1,10 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { handleEnterKey } from './utils/keyboardUtils';
-import CategoryList from './components/CategoryList';
-import { CategoryType } from './types/categoryType';
-import { getCurrentTimestamp } from './utils/timeUtils';
-import { AuthContext } from './context/authContext';
+import { handleEnterKey } from '../utils/keyboardUtils';
+import CategoryList from '../components/CategoryList';
+import { CategoryType } from '../types/categoryType';
+import { getCurrentTimestamp } from '../utils/timeUtils';
+import { AuthContext } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
 
 const LOCAL_STORAGE_KEY = 'todoApp.categories'

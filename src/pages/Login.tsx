@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LoginValidation } from "./Validations";
-import { AuthContext } from './context/authContext';
+import { LoginValidation } from "../utils/Validations";
+import { AuthContext } from '../context/authContext';
 import axios from "axios";
 
 const Login = () => {

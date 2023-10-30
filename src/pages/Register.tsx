@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import { RegistrationValidation } from "./Validations"
+import { RegistrationValidation } from "../utils/Validations"
 import axios from "axios"
 
 const Register = () => {

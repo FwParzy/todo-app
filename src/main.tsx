@@ -1,13 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import "bootstrap/dist/css/bootstrap.css";
-import "./styles.css"
+import "./css/styles.css"
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Login from './Login.tsx';
-import Register from './Register.tsx';
-import App from './App.tsx';
+import Login from './pages/Login.tsx';
+import Register from './pages/Register.tsx';
+import App from './pages/App.tsx';
+import EditUser from './pages/EditUser.tsx';
 import { AuthContextProvider } from './context/authContext';
-import EditUser from './EditUser.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>

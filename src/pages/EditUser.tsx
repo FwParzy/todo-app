@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom"
 import { useContext, useEffect, useRef, useState } from "react"
-import { EditUserValidation } from "./Validations"
+import { EditUserValidation } from "../utils/Validations"
 import axios from "axios"
-import { AuthContext } from "./context/authContext"
+import { AuthContext } from "../context/authContext"
 
 const EditUser = () => {
   const { currentUser, editUser } = useContext(AuthContext);
