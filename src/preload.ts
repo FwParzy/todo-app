@@ -1,11 +1,10 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('electron', {
-  send: (channel: string, data: any) => {
+  send: <T>(channel: string, data: T) => {
     ipcRenderer.send(channel, data);
   },
-  on: (channel: string, callback: (data: any) => void) => {
-    ipcRenderer.on(channel, (event, ...args) => callback(...args));
+  on: <T>(channel: string, callback: (data: T) => void) => {
+    ipcRenderer.on(channel, (_event, arg: T) => callback(arg));
   }
 });
-

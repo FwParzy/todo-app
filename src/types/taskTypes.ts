@@ -7,3 +7,5 @@ export type TaskType = {
   cancelTs: string,
   deleteTs: string
 }
+
+export type ToggleTaskFunction = ( id: string) => void;
