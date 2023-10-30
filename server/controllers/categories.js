@@ -34,7 +34,6 @@ export const get = (req, res) => {
   });
 };
 
-
 export const deleteOne = (req, res) => {
   const query = 'SELECT * FROM categories WHERE userId = ? AND id = ?';
 

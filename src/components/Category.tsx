@@ -1,7 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { TaskType } from '../types/taskTypes';
-
 import TaskEdit from "./TaskEdit";
 import TaskList from "./TaskList";
 import { getCurrentTimestamp } from "../utils/timeUtils";

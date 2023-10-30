@@ -29,7 +29,6 @@ function App() {
       axios.get(`http://localhost:8081/api/cat/${currentUser.id}`)
         .then(response => {
           setCategories(response.data);
-          // console.log(response.data[3].name)
         })
         .catch(error => {
           console.error("Error fetching categories:", error);
@@ -39,7 +38,7 @@ function App() {
   // Populate the page with categories api
   useEffect(() => {
     fetchCategories()
-}, [currentUser]);
+  }, [currentUser]);
 
   const [values, setValues] = useState({
     name: '',
@@ -56,7 +55,7 @@ function App() {
     setValues(prev => ({ ...prev, [name]: value }))
   }
 
-const handleAddCategory = async() => {
+  const handleAddCategory = async () => {
     const validationErrors = CategoryCreateValidation(values);
     setErrors(validationErrors);
     if (validationErrors.name !== '' || validationErrors.userId !== '') return;
