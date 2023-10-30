@@ -5,7 +5,7 @@ import axios from "axios"
 import { AuthContext } from "./context/authContext"
 
 const EditUser = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, editUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const usernameEditRef = useRef<HTMLInputElement>(null)
   const emailEditRef = useRef<HTMLInputElement>(null)
@@ -60,9 +60,10 @@ const EditUser = () => {
     if (values.username === currentUser.username
       && values.email === currentUser.email
       && values.password === '')
-     return validationErrors.api = 'Nothing to update'
+      return validationErrors.api = 'Nothing to update'
     try {
       await axios.post('http://localhost:8081/api/auth/editUser', values);
+      await editUser(values)
       navigate('/');
     } catch (err) {
       setErrors(prevErrors => ({

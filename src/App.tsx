@@ -84,7 +84,7 @@ function App() {
           navigate('/login');
         }}
       >Logout</button>
-      {currentUser &&<button type="button" onClick={() => navigate('/editUser')}> Edit {currentUser.username}</button>}
+      {currentUser && <button type="button" onClick={() => navigate('/editUser')}> Edit {currentUser.username}</button>}
     </div>
   )
 }

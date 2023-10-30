@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 type AuthContextType = {
   currentUser: any;
   login: (inputs: any) => Promise<void>;
+  editUser: (inputs: any) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -25,12 +26,17 @@ export const AuthContextProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
+  const editUser = async (inputs: any) => {
+    const res = await axios.post('http://localhost:8081/api/auth/editUser', inputs);
+    setCurrentUser(res.data);
+  };
+
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(currentUser));
   }, [currentUser]);
 
   return (
-    <AuthContext.Provider value={{ currentUser, login, logout }}>
+    <AuthContext.Provider value={{ currentUser, login, logout, editUser }}>
       {children}
     </AuthContext.Provider>
   );
