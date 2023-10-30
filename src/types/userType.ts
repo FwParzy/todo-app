@@ -5,4 +5,3 @@ export type User = {
   createTs: string;
   cancelTs: string | null;
 };
-

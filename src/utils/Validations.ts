@@ -74,7 +74,6 @@ export function EditUserValidation(values: {
   email: string,
   password: string,
   passwordConfirm: string
-
 }) {
   let errors = {
     username: '',
