@@ -1,22 +1,24 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { TaskType } from '../types/taskTypes';
-
 import TaskEdit from "./TaskEdit";
 import TaskList from "./TaskList";
 import { getCurrentTimestamp } from "../utils/timeUtils";
 import { handleEnterKey } from "../utils/keyboardUtils";
 import { CategoryType } from "../types/categoryType";
+import axios from "axios";
+import { AuthContext } from "../context/authContext";
 
 interface Props {
   category: CategoryType;
-  onUpdateCategory: (updatedCategory: CategoryType) => void;
+  onUpdateCategory: () => void;
 }
 
 const LOCAL_STORAGE_KEY = 'todoApp.tasks'
 
 const Category = ({ category, onUpdateCategory }: Props) => {
 
+  const { currentUser } = useContext(AuthContext);
   const [isTaskEditVisible, setIsTaskEditVisible] = useState(false)
   const [isCategoryEditVisible, setIsCategoryEditVisible] = useState(false)
 
@@ -92,16 +94,20 @@ const Category = ({ category, onUpdateCategory }: Props) => {
     handleCancel();
   };
 
-  function handleOk() {
-    console.log("handling Ok")
-    const newName = catEditRef.current?.value;
-    if (!newName) return;
-
-    const updatedCategory = {
-      ...category,
-      name: newName
+  const handleOk = async () => {
+    const values = {
+      name: catEditRef.current?.value,
+      userId: currentUser.id,
+      id: category.id
     };
-    onUpdateCategory(updatedCategory);
+    if (!values.name) return;
+
+    try {
+      await axios.post('http://localhost:8081/api/cat/updateName', values);
+    } catch (err) {
+      console.error(err.response.data.message)
+    }
+    onUpdateCategory();
     setIsCategoryEditVisible(false);
   }
 
@@ -109,26 +115,19 @@ const Category = ({ category, onUpdateCategory }: Props) => {
     setIsCategoryEditVisible(false)
   }
 
-  function handleDelete() {
-    console.log("handling Delete")
-    const deleted = getCurrentTimestamp()
-    const canceled = getCurrentTimestamp()
-
-    const updatedCategory = {
-      ...category,
-      cancelTs: canceled,
-      deleteTs: deleted
-    };
-    onUpdateCategory(updatedCategory);
+  const handleDelete = async () => {
+    const values = {
+      userId: currentUser.id,
+      id: category.id
+    }
+    try {
+      await axios.post('http://localhost:8081/api/cat/delete', values);
+      // Todo: add delete post for all tasks under category
+    } catch (err) {
+      console.error(err.response.data.message)
+    }
+    onUpdateCategory();
     setIsCategoryEditVisible(false);
-
-    setTasks(prevTasks =>
-      prevTasks.map(task =>
-        task.categoryId === updatedCategory.id
-          ? { ...task, cancelTs: canceled, deleteTs: deleted }
-          : task
-      )
-    );
   }
 
   // This sets the ref to the name for Category editing
@@ -173,7 +172,6 @@ const Category = ({ category, onUpdateCategory }: Props) => {
             <button onClick={handleDelete} className='category_delete'>Delete</button>
           </div>
         }
-
         <TaskList
           tasks={tasks}
           toggleTask={toggleTaskCompleted}
