@@ -9,7 +9,7 @@ import { handleEnterKey } from "../utils/keyboardUtils";
 import { CategoryType } from "../types/categoryType";
 
 interface Props {
-  category: any;
+  category: CategoryType;
   onUpdateCategory: (updatedCategory: CategoryType) => void;
 }
 
@@ -74,7 +74,7 @@ const Category = ({ category, onUpdateCategory }: Props) => {
     );
   }
 
-  function toggleTaskCompleted(id: any) {
+  function toggleTaskCompleted(id: string) {
     const newTasks = [...tasks]
     const task = newTasks.find(task => task.id === id)
     task.completed = !task.completed

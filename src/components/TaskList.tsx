@@ -1,9 +1,9 @@
 import Task from "./Task";
-import { TaskType } from '../types/taskTypes';
+import { TaskType, ToggleTaskFunction } from '../types/taskTypes';
 
 interface Props {
   tasks: TaskType[];
-  toggleTask: any;
+  toggleTask: ToggleTaskFunction;
   category: string;
   editTask: (updatedTask: TaskType) => void;
 }

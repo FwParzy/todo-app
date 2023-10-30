@@ -50,7 +50,7 @@ const EditUser = () => {
     const validationErrors = EditUserValidation(values);
     setErrors(validationErrors);
 
-    // Check for any errors
+    // Check for errors
     if (validationErrors.username !== ''
       || validationErrors.email !== ''
       || validationErrors.password !== ''

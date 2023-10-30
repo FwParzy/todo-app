@@ -23,15 +23,3 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </AuthContextProvider>
     </React.StrictMode>,
 )
-
-// Remove Preload scripts loading
-postMessage({ payload: 'removeLoading' }, '*')
-
-// Use contextBridge
-try {
-    window.ipcRenderer.on('main-process-message', (_event, message) => {
-        console.log(message);
-    });
-} catch (error) {
-    console.warn("ipcRenderer is not defined. Ignoring the error.");
-}

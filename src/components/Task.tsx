@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import TaskEdit from "./TaskEdit";
 import { getCurrentTimestamp, setTaskDeleteTs } from "../utils/timeUtils";
-import { TaskType } from "../types/taskTypes";
+import { TaskType, ToggleTaskFunction } from "../types/taskTypes";
 
 interface Props {
   task: TaskType;
-  toggleTask: any;
+  toggleTask: ToggleTaskFunction;
   editTask: (updatedTask: TaskType) => void;
 }
 

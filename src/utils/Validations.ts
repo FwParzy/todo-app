@@ -1,4 +1,4 @@
-export function LoginValidation(values: any) {
+export function LoginValidation(values: { username: string, password: string }) {
   let errors = {
     username: '',
     password: '',
@@ -22,7 +22,9 @@ export function LoginValidation(values: any) {
   return errors
 }
 
-export function RegistrationValidation(values: any) {
+export function RegistrationValidation(values: {
+  username: string, email: string, password: string, passwordConfirm: string
+}) {
   let errors = {
     username: '',
     email: '',
@@ -66,7 +68,14 @@ export function RegistrationValidation(values: any) {
   return errors;
 }
 
-export function EditUserValidation(values: any) {
+export function EditUserValidation(values: {
+  id: number,
+  username: string,
+  email: string,
+  password: string,
+  passwordConfirm: string
+
+}) {
   let errors = {
     username: '',
     email: '',
