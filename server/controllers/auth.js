@@ -73,7 +73,7 @@ export const logout = (_req, res) => {
 export const editUser = (req, res) => {
   // Check if user exists
   const checkUserQuery = 'SELECT * FROM users WHERE id != ? AND (email = ? OR username = ?)';
-    const values = [req.body.id, req.body.email, req.body.username];
+  const values = [req.body.id, req.body.email, req.body.username];
 
   db.query(checkUserQuery, values, (err, results) => {
     if (err) {
@@ -99,36 +99,36 @@ export const editUser = (req, res) => {
     updateUserQuery += ' WHERE id = ?';
     values.push(req.body.id);
 
-  db.query(updateUserQuery, values, (err) => {
-    if (err) {
-      console.error("Database error:", err);
-      return res.status(500).json({ message: 'Server error: Updating User' });
-    }
-
-    // After updating, retrieve the updated user details
-    const retrieveUserQuery = 'SELECT * FROM users WHERE id = ?';
-    db.query(retrieveUserQuery, [req.body.id], (err, data) => {
+    db.query(updateUserQuery, values, (err) => {
       if (err) {
         console.error("Database error:", err);
-        return res.status(500).json({ message: 'Server error: Retrieving Updated User' });
+        return res.status(500).json({ message: 'Server error: Updating User' });
       }
 
-      if (data.length === 0) {
-        return res.status(404).json({ message: 'Updated user not found' });
-      }
+      // After updating, retrieve the updated user details
+      const retrieveUserQuery = 'SELECT * FROM users WHERE id = ?';
+      db.query(retrieveUserQuery, [req.body.id], (err, data) => {
+        if (err) {
+          console.error("Database error:", err);
+          return res.status(500).json({ message: 'Server error: Retrieving Updated User' });
+        }
 
-      // Generate JWT token for the user
-      const token = jwt.sign({ id: data[0].id }, 'jwtKey');
-      const { password, ...other } = data[0];
+        if (data.length === 0) {
+          return res.status(404).json({ message: 'Updated user not found' });
+        }
 
-      // Set JWT token in the cookie and return updated user details
-      res.cookie('access_token', token, {
-        httpOnly: true,
-        sameSite: 'None',
-        secure: true,
-      })
-        .status(200)
-        .json(other);
+        // Generate JWT token for the user
+        const token = jwt.sign({ id: data[0].id }, 'jwtKey');
+        const { password, ...other } = data[0];
+
+        // Set JWT token in the cookie and return updated user details
+        res.cookie('access_token', token, {
+          httpOnly: true,
+          sameSite: 'None',
+          secure: true,
+        })
+          .status(200)
+          .json(other);
       });
     });
   });
