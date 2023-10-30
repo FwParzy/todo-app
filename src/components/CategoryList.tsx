@@ -3,7 +3,7 @@ import Category from "./Category";
 
 interface Props {
   categories: CategoryType[];
-  onUpdateCategory: (updatedCategory: CategoryType) => void;
+  onUpdateCategory: () => void;
 }
 
 const CategoryList = ({ categories, onUpdateCategory }: Props) => {

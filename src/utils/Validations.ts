@@ -115,3 +115,25 @@ export function EditUserValidation(values: {
 
   return errors;
 }
+
+export function CategoryCreateValidation(values: {
+  name: string,
+  userId: number
+}) {
+  let errors = {
+    name: '',
+    userId: '',
+    api: ''
+  };
+
+  // Validations for name
+  if (!values.name) {
+    errors.name = "Name is required";
+  }
+
+  // Validations for user
+  if (!values.userId) {
+    errors.userId = "Something Broke: Please log out and back in";
+  }
+  return errors;
+}

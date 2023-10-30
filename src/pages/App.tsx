@@ -1,18 +1,18 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { handleEnterKey } from '../utils/keyboardUtils';
 import CategoryList from '../components/CategoryList';
 import { CategoryType } from '../types/categoryType';
-import { getCurrentTimestamp } from '../utils/timeUtils';
 import { AuthContext } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { CategoryCreateValidation } from '../utils/Validations';
+// Remove unusedPackages uuid
+// Rebase timeUtils
 
-const LOCAL_STORAGE_KEY = 'todoApp.categories'
 function App() {
 
   const { currentUser, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const categoryNameRef = useRef<HTMLInputElement>(null)
 
   // Redirect if not logged in
   useEffect(() => {
@@ -21,59 +21,70 @@ function App() {
     }
   }, [currentUser, navigate]);
 
-  const initializeCategories = () => {
-    const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return storedData ? JSON.parse(storedData) : [];
-  };
-  const [categories, setCategories] = useState(initializeCategories)
+  const [categories, setCategories] = useState<CategoryType[]>([]);
+  const categoryNameRef = useRef<HTMLInputElement>(null)
 
-  // Save to local storage
+  const fetchCategories = () => {
+    if (currentUser) {
+      axios.get(`http://localhost:8081/api/cat/${currentUser.id}`)
+        .then(response => {
+          setCategories(response.data);
+          // console.log(response.data[3].name)
+        })
+        .catch(error => {
+          console.error("Error fetching categories:", error);
+        });
+    }
+  }
+  // Populate the page with categories api
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(categories));
-  }, [categories])
+    fetchCategories()
+}, [currentUser]);
 
-  const refreshCategories = () => {
-    console.log("refreshing tasks")
-    const updatedCategories = initializeCategories();
-    setCategories(updatedCategories);
+  const [values, setValues] = useState({
+    name: '',
+    userId: currentUser.id
+  })
+  const [errors, setErrors] = useState({
+    name: '',
+    userId: '',
+    api: ''
+  })
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setValues(prev => ({ ...prev, [name]: value }))
   }
 
-  function handleAddCategory() {
-    const name = categoryNameRef.current?.value;
-    if (!name) return
+const handleAddCategory = async() => {
+    const validationErrors = CategoryCreateValidation(values);
+    setErrors(validationErrors);
+    if (validationErrors.name !== '' || validationErrors.userId !== '') return;
 
-    refreshCategories()
-    setCategories((prevCategories: CategoryType[]) => {
-      return [...prevCategories, {
-        id: uuidv4(),
-        name: name,
-        createTs: getCurrentTimestamp(),
-        cancelTs: null,
-        deleteTs: null
-      }]
-    })
-    categoryNameRef.current.value = ''
-  }
-
-  function handleUpdateCategory(updatedCategory: CategoryType) {
-    setCategories((prevCategories: CategoryType[]) => {
-      return prevCategories.map(cat =>
-        cat.id === updatedCategory.id ? updatedCategory : cat
-      );
-    });
+    try {
+      await axios.post('http://localhost:8081/api/cat/create', values);
+      fetchCategories();
+      categoryNameRef.current.value = ''
+    } catch (err) {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        api: err.response.data.message
+      }));
+    }
   }
 
   return (
     <div>
       <CategoryList
         categories={categories}
-        onUpdateCategory={handleUpdateCategory}
+        onUpdateCategory={fetchCategories}
       />
       <input
         ref={categoryNameRef}
         type="text"
-        name="inputCategory"
+        name="name"
         placeholder="Enter Category"
+        onChange={handleInput}
         onKeyDown={(e) => handleEnterKey(e, handleAddCategory)}
         autoFocus
       />
@@ -85,6 +96,9 @@ function App() {
         }}
       >Logout</button>
       {currentUser && <button type="button" onClick={() => navigate('/editUser')}> Edit {currentUser.username}</button>}
+      <span className="text-danger">{errors.api}</span>
+      <span className="text-danger">{errors.name}</span>
+      <span className="text-danger">{errors.userId}</span>
     </div>
   )
 }
