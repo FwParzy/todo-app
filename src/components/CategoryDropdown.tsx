@@ -27,7 +27,6 @@ export const CategoryDropdown = ({ currentCategory, onCategoryChange, onOk }: Pr
           });
       }
     };
-
     fetchCategories();
   }, []);
 

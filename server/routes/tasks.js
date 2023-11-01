@@ -21,5 +21,4 @@ router.post('/changeCat', updateCategory);
 router.post('/deleteOld', deleteOldTasks);
 router.post('/deleteCat', deleteAllInCat);
 
-
 export default router;

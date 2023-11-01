@@ -84,12 +84,6 @@ const Category = ({ category, onUpdateCategory }: Props) => {
   }
 
   function toggleTaskCompleted(id: string) {
-    // const newTasks = [...tasks]
-    // const task = newTasks.find(task => task.id === id)
-    // task.completed = !task.completed
-    // task.cancelTs = getCurrentTimestamp()
-    // if (!task.completed) task.cancelTs = null
-    // setTasks(newTasks)
   }
 
   const catEditRef = useRef<HTMLInputElement>(null)

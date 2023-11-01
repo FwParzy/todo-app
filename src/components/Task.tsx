@@ -138,7 +138,6 @@ const Task = ({ task: initialTask, onUpdateTask }: Props) => {
       categoryId: task.categoryId,
       newCatId: selectedCategory
     }
-    console.log(values)
     const validationErrors = TaskCatValidation(values);
     setErrors(prevErrors => ({
       ...prevErrors,
@@ -160,7 +159,7 @@ const Task = ({ task: initialTask, onUpdateTask }: Props) => {
   }
 
   return (
-        task.deleteTs === null && (
+    task.deleteTs === null && (
       <div>
         {!editTaskVisibility &&
           <>
@@ -185,9 +184,9 @@ const Task = ({ task: initialTask, onUpdateTask }: Props) => {
             <span className="text-danger">{errors.categoryId}</span>
           </>
         }
-      <span className="text-danger">{errors.api}</span>
+        <span className="text-danger">{errors.api}</span>
       </div>
-  )
+    )
   )
 }
 
