@@ -137,3 +137,55 @@ export function CategoryCreateValidation(values: {
   }
   return errors;
 }
+
+export function TaskCreateValidation(values: {
+  name: string,
+  userId: number,
+  categoryId: number
+}) {
+  let errors = {
+    name: '',
+    userId: '',
+    categoryId: '',
+    api: ''
+  };
+
+  // Validations for name
+  if (!values.name) {
+    errors.name = "Name is required";
+  }
+
+  // Validations for user
+  if (!values.userId) {
+    errors.userId = "Something Broke: Please log out and back in";
+  }
+
+  // Validations for category
+  if (!values.categoryId) {
+    errors.categoryId = "Something Broke: Somehow there isnt a Category for this task";
+  }
+
+  return errors;
+}
+
+export function TaskCatValidation(values: {
+  categoryId: number
+  newCatId: number
+}) {
+  let errors = {
+    categoryId: '',
+  };
+
+  // Validations for category
+  if (!values.categoryId) {
+    errors.categoryId = "Something Broke: Somehow there isnt a Category for this task";
+  }
+  if (!values.newCatId) {
+    errors.categoryId = "Something Broke: There isnt a new category to switch to";
+  }
+  if (values.categoryId === values.newCatId) {
+    errors.categoryId = "You cant change the category to the same thing"
+  }
+
+  return errors;
+}

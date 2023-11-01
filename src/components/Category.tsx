@@ -1,5 +1,4 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
 import { TaskType } from '../types/taskTypes';
 import TaskEdit from "./TaskEdit";
 import TaskList from "./TaskList";
@@ -8,13 +7,12 @@ import { handleEnterKey } from "../utils/keyboardUtils";
 import { CategoryType } from "../types/categoryType";
 import axios from "axios";
 import { AuthContext } from "../context/authContext";
+import { TaskCreateValidation } from "../utils/Validations";
 
 interface Props {
   category: CategoryType;
   onUpdateCategory: () => void;
 }
-
-const LOCAL_STORAGE_KEY = 'todoApp.tasks'
 
 const Category = ({ category, onUpdateCategory }: Props) => {
 
@@ -30,59 +28,68 @@ const Category = ({ category, onUpdateCategory }: Props) => {
     setIsCategoryEditVisible(!isCategoryEditVisible)
   }
 
-  const initializeTasks = () => {
-    const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return storedData ? JSON.parse(storedData) : [];
-  };
-
   const taskNameRef = useRef<HTMLInputElement>(null)
-  const [tasks, setTasks] = useState<TaskType[]>(initializeTasks);
+  const [tasks, setTasks] = useState<TaskType[]>([]);
 
-  // Save to local storage
+  const fetchTasks = () => {
+    if (currentUser) {
+      axios.get(`http://localhost:8081/api/task/${currentUser.id}&${category.id}`)
+        .then(response => {
+          setTasks(response.data);
+        })
+        .catch(error => {
+          console.error("Error fetching categories:", error);
+        });
+    }
+  }
+  // Populate the page with categories api
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tasks));
-  }, [tasks])
+    fetchTasks()
+  }, [currentUser]);
 
-  const refreshTasks = () => {
-    console.log("refreshing tasks")
-    const updatedTasks = initializeTasks();
-    setTasks(updatedTasks);
+  const [values, setValues] = useState({
+    name: '',
+    userId: currentUser.id,
+    categoryId: category.id
+  })
+  const [errors, setErrors] = useState({
+    name: '',
+    userId: '',
+    categoryId: '',
+    api: ''
+  })
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setValues(prev => ({ ...prev, [name]: value }))
   }
 
-  function handleAddTask() {
-    const name = taskNameRef.current?.value;
-    if (!name) return
+  const handleAddTask = async () => {
+    const validationErrors = TaskCreateValidation(values);
+    setErrors(validationErrors);
+    if (validationErrors.name !== ''
+      || validationErrors.userId !== ''
+      || validationErrors.categoryId !== '') return;
 
-    refreshTasks()
-    setTasks((prevTasks: TaskType[]) => {
-      return [...prevTasks, {
-        id: uuidv4(),
-        categoryId: category.id,
-        name: name,
-        completed: false,
-        createTs: getCurrentTimestamp(),
-        cancelTs: null,
-        deleteTs: null
-      }]
-    })
-    taskNameRef.current.value = ''
-  }
-
-  function handleEditTask(updatedTask: TaskType) {
-    setTasks(prevTasks =>
-      prevTasks.map(task =>
-        task.id === updatedTask.id ? { ...updatedTask } : task,
-      )
-    );
+    try {
+      await axios.post('http://localhost:8081/api/task/create', values);
+      fetchTasks();
+      taskNameRef.current.value = ''
+    } catch (err) {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        api: err.response.data.message
+      }));
+    }
   }
 
   function toggleTaskCompleted(id: string) {
-    const newTasks = [...tasks]
-    const task = newTasks.find(task => task.id === id)
-    task.completed = !task.completed
-    task.cancelTs = getCurrentTimestamp()
-    if (!task.completed) task.cancelTs = null
-    setTasks(newTasks)
+    // const newTasks = [...tasks]
+    // const task = newTasks.find(task => task.id === id)
+    // task.completed = !task.completed
+    // task.cancelTs = getCurrentTimestamp()
+    // if (!task.completed) task.cancelTs = null
+    // setTasks(newTasks)
   }
 
   const catEditRef = useRef<HTMLInputElement>(null)
@@ -145,10 +152,15 @@ const Category = ({ category, onUpdateCategory }: Props) => {
             <h2> {category.name} </h2>
             <TaskEdit
               inputRef={taskNameRef}
+              onChange={handleInput}
               onCancel={handleTaskPopup}
               onOk={handleAddTask}
               currentCategory={category.id}
             />
+            <span className="text-danger">{errors.api}</span>
+            <span className="text-danger">{errors.name}</span>
+            <span className="text-danger">{errors.userId}</span>
+            <span className="text-danger">{errors.categoryId}</span>
           </>
         }
         {!isTaskEditVisible && !isCategoryEditVisible &&
@@ -174,10 +186,10 @@ const Category = ({ category, onUpdateCategory }: Props) => {
         }
         <TaskList
           tasks={tasks}
-          toggleTask={toggleTaskCompleted}
           category={category.id}
-          editTask={handleEditTask}
+          onUpdateTask={fetchTasks}
         />
+
       </div>
     )
   )

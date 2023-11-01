@@ -1,8 +1,8 @@
 export type TaskType = {
-  id: string;
-  categoryId: string;
+  id: number;
+  categoryId: number;
   name: string;
-  completed: boolean;
+  completed: boolean | number;
   createTs: string,
   cancelTs: string,
   deleteTs: string

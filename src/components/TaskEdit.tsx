@@ -3,14 +3,15 @@ import { CategoryDropdown } from './CategoryDropdown';
 
 interface Props {
   inputRef: React.RefObject<HTMLInputElement>;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onCancel: () => void;
   onOk: () => void;
   onDelete?: () => void;
-  currentCategory: string;
-  onCategoryChange?: (categoryId: string) => void;
+  currentCategory?: number;
+  onCategoryChange?: (categoryId: number) => void;
 };
 
-const TaskEdit = ({ inputRef, currentCategory, onCancel, onOk, onDelete, onCategoryChange }: Props) => {
+const TaskEdit = ({ inputRef, currentCategory, onChange, onCancel, onOk, onDelete, onCategoryChange }: Props) => {
 
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     // Guard for CategoryDropdown
@@ -24,7 +25,8 @@ const TaskEdit = ({ inputRef, currentCategory, onCancel, onOk, onDelete, onCateg
       <input
         ref={inputRef}
         type="text"
-        name="inputCategory"
+        name="name"
+        onChange={onChange}
         placeholder="Enter Task"
         onKeyDown={(e) => handleEnterKey(e, onOk)}
         className='task_input'
