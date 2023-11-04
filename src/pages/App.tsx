@@ -13,6 +13,7 @@ function App() {
 
   const { currentUser, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const firstRender = useRef(true);
 
   // Redirect if not logged in
   useEffect(() => {
@@ -50,6 +51,30 @@ function App() {
     api: ''
   })
 
+  // This effectively deletes completed tasks at midnight
+  useEffect(() => {
+    const updateTasks = async () => {
+      try {
+        await axios.post('http://localhost:8081/api/task/deleteOld', values);
+      } catch (err) {
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          api: err.response.data.message
+        }));
+      }
+    };
+
+    if (firstRender.current) {
+    updateTasks();
+    firstRender.current = false;
+  }
+
+    // Set up the interval to call the callback function every hour
+    const intervalId = setInterval(updateTasks, 60 * 60 * 1000);
+    // const intervalId = setInterval(updateTasks, 10 * 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setValues(prev => ({ ...prev, [name]: value }))
@@ -74,6 +99,7 @@ function App() {
 
   return (
     <div>
+      <span className="text-danger">{errors.api}</span>
       <CategoryList
         categories={categories}
         onUpdateCategory={fetchCategories}
@@ -95,7 +121,6 @@ function App() {
         }}
       >Logout</button>
       {currentUser && <button type="button" onClick={() => navigate('/editUser')}> Edit {currentUser.username}</button>}
-      <span className="text-danger">{errors.api}</span>
       <span className="text-danger">{errors.name}</span>
       <span className="text-danger">{errors.userId}</span>
     </div>

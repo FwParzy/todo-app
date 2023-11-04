@@ -1,5 +1,5 @@
 import Task from "./Task";
-import { TaskType, ToggleTaskFunction } from '../types/taskTypes';
+import { TaskType } from '../types/taskTypes';
 
 interface Props {
   tasks: TaskType[];

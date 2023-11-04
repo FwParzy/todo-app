@@ -27,6 +27,13 @@ CREATE TABLE categories (
 TRUNCATE TABLE tasks;
 
  UPDATE tasks SET cancelTs = CURDATE() - INTERVAL 1 DAY WHERE id = 3;
+    SELECT * FROM tasks
+    WHERE userId = 1
+    AND completed = 1
+    AND cancelTs IS NOT NULL
+    AND deleteTs IS NULL
+    AND DATE(cancelTs) < CURDATE();
+
 
 CREATE TABLE tasks (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,

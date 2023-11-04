@@ -2,7 +2,14 @@ import { db } from '../db.js';
 
 export const create = (req, res) => {
   // Check if Task already exists for the user
-  const checkQuery = 'SELECT * FROM tasks WHERE name = ? AND userId = ? AND categoryId = ?';
+  // const checkQuery = 'SELECT * FROM tasks WHERE name = ? AND userId = ? AND categoryId = ?';
+  const checkQuery = `
+SELECT * FROM tasks
+WHERE name = ?
+AND userId = ?
+AND categoryId = ?
+AND deleteTs IS NULL
+`;
 
   db.query(checkQuery, [req.body.name, req.body.userId, req.body.categoryId], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server error: Checking Task Existance' });
@@ -121,43 +128,85 @@ export const updateCategory = (req, res) => {
 };
 
 export const deleteOldTasks = (req, res) => {
-  const query = 'SELECT * FROM tasks WHERE userId = ? AND id = ?';
+  const query = `
+    SELECT * FROM tasks
+    WHERE userId = ?
+    AND completed = 1
+    AND cancelTs IS NOT NULL
+    AND deleteTs IS NULL
+    AND DATE(cancelTs) < CURDATE();
+  `;
 
-  db.query(query, [req.body.userId, req.body.id], (err, data) => {
+  if (!req.body.userId) return res.status(500).json({ message: 'Server error: No user ID' });
+  db.query(query, [req.body.userId], (err, tasks) => {
     if (err) return res.status(500).json({ message: 'Server error: Fetching tasks' });
-    if (data.length === 0) {
-      return res.status(404).json({ message: 'Task not found' });
+
+    if (tasks.length === 0) {
+      console.log(tasks)
+      return res.status(200).json({ message: 'No tasks found to delete.' });
     }
 
-    // Check if the task is not completed
-    if (data[0].completed !== 1) {
-      return res.status(200).json({ message: 'Task is not completed.', taskName: data[0].name });
-    }
+    // Extract task names and unique category IDs
+    const taskNames = tasks.map(task => task.name);
+    const categoryIds = [...new Set(tasks.map(task => task.categoryId))];
 
-    // Set Delete Timestamp if it's a new day and the task is completed
+
+    // Set Delete Timestamp for all tasks that were selected
     const deleteQuery = `
       UPDATE tasks
       SET deleteTs = NOW()
       WHERE userId = ?
-      AND id = ?
       AND completed = 1
       AND cancelTs IS NOT NULL
       AND deleteTs IS NULL
       AND DATE(cancelTs) < CURDATE();
     `;
 
-    db.query(deleteQuery, [req.body.userId, req.body.id], (err, result) => {
-      if (err) return res.status(500).json({ message: 'Server error: Deleting Task' });
-      if (result.affectedRows === 0) {
-        // No tasks were deleted, meaning the task was not old enough or not completed
-        return res.status(200).json({ message: 'No tasks were deleted. Task is not old enough or not completed.', taskName: data[0].name });
+    db.query(deleteQuery, [req.body.userId], (err, updateResult) => {
+      if (err) return res.status(500).json({ message: 'Server error: Deleting tasks' });
+
+      // Check if tasks were deleted
+      if (updateResult.affectedRows === 0) {
+        // No tasks were deleted
+        return res.status(200).json({ message: 'No tasks were deleted. Tasks are not old enough or not completed.', taskNames: taskNames });
       }
-      // Task was deleted
-      return res.status(200).json({ message: 'Task was deleted.', taskName: data[0].name });
+
+      // Tasks were deleted
+      return res.status(200).json({
+        message: 'Tasks were deleted.',
+        taskNames: taskNames,
+        categoryIds: categoryIds
+      });
     });
   });
 };
 
 export const deleteAllInCat = (req, res) => {
-  console.log("pretend I did something")
+  if (!req.body.id) return res.status(400).json({ message: 'No categoryId provided.' });
+
+  const query = 'SELECT * FROM tasks WHERE userId = ? AND categoryId = ? AND deleteTs IS NULL';
+
+  db.query(query, [req.body.userId, req.body.id], (err, data) => {
+    if (err) return res.status(500).json({ message: 'Server error: Fetching tasks under your category' });
+    if (data.length === 0)
+      return res.status(200).json({ message: 'Category was empty' });
+
+    // SQL query to set deleteTs to NOW() for all tasks in the given category
+    const deleteQuery = `
+UPDATE tasks
+SET deleteTs = NOW()
+WHERE userId = ?
+AND categoryId = ?
+AND deleteTs IS NULL;
+`;
+
+    db.query(deleteQuery, [req.body.userId, req.body.id], (err, data) => {
+      if (err) {
+        console.error('Error deleting tasks:', err);
+        return res.status(500).json({ message: 'Server error: Deleting tasks' });
+      }
+
+      return res.status(200).json({ message: 'All tasks in the category have been deleted.', deletedTasksCount: data.affectedRows });
+    });
+  });
 };

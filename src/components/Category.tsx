@@ -83,9 +83,6 @@ const Category = ({ category, onUpdateCategory }: Props) => {
     }
   }
 
-  function toggleTaskCompleted(id: string) {
-  }
-
   const catEditRef = useRef<HTMLInputElement>(null)
 
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
@@ -123,7 +120,7 @@ const Category = ({ category, onUpdateCategory }: Props) => {
     }
     try {
       await axios.post('http://localhost:8081/api/cat/delete', values);
-      // Todo: add delete post for all tasks under category
+      await axios.post('http://localhost:8081/api/task/deleteCat', values);
     } catch (err) {
       console.error(err.response.data.message)
     }

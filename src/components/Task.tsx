@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import TaskEdit from "./TaskEdit";
-import { getCurrentTimestamp, setTaskDeleteTs } from "../utils/timeUtils";
 import { TaskType } from "../types/taskTypes";
 import { AuthContext } from "../context/authContext";
 import axios from "axios";
@@ -15,7 +14,6 @@ interface Props {
 const Task = ({ task: initialTask, onUpdateTask }: Props) => {
   const { currentUser } = useContext(AuthContext);
   const [task, setTask] = useState<TaskType>(initialTask);
-  const firstRender = useRef(true);
 
   const [values, setValues] = useState({
     id: task.id,
@@ -33,30 +31,6 @@ const Task = ({ task: initialTask, onUpdateTask }: Props) => {
     name: '',
     api: ''
   })
-
-
-  useEffect(() => {
-    const updateTasks = async () => {
-      try {
-        const response = await axios.post('http://localhost:8081/api/task/deleteOld', values);
-        console.log('Tasks updated:', response.data);
-      } catch (error) {
-        console.error('Error updating tasks:', error);
-      }
-    };
-
-    if (firstRender.current) {
-      updateTasks();
-      onUpdateTask();
-      firstRender.current = false;
-    }
-
-    // Set up the interval to call the callback function every hour
-    const intervalId = setInterval(updateTasks, 60 * 60 * 1000);
-    // const intervalId = setInterval(updateTasks, 10 * 1000);
-    return () => clearInterval(intervalId);
-  }, []);
-
 
   const taskNameRef = useRef<HTMLInputElement>(null)
   const [editTaskVisibility, setEditTaskVisibility] = useState(false)
