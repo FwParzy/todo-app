@@ -149,7 +149,7 @@ const Category = ({ category, onUpdateCategory }: Props) => {
       <div>
         {isTaskEditVisible &&
           <>
-            <h2> {category.name} </h2>
+            <h2 className="category-title"> {category.name} </h2>
             <TaskEdit
               inputRef={taskNameRef}
               onChange={handleInput}
@@ -165,12 +165,12 @@ const Category = ({ category, onUpdateCategory }: Props) => {
         }
         {!isTaskEditVisible && !isCategoryEditVisible &&
           <>
-            <h2 onClick={handleTaskPopup}> {category.name} </h2>
+            <h2 onClick={handleTaskPopup} className="category-title"> {category.name} </h2>
             <button onClick={handleCategoryPopup} > Edit </button>
           </>
         }
         {isCategoryEditVisible &&
-          <div className='category_edit' onBlur={handleBlur}>
+          <div className='category_edit category-title' onBlur={handleBlur} >
             <input
               ref={catEditRef}
               type="text"

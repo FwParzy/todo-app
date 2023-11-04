@@ -6,8 +6,8 @@ import { AuthContext } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CategoryCreateValidation } from '../utils/Validations';
+import "../css/app.css"
 // Remove unusedPackages uuid
-// Rebase timeUtils
 
 function App() {
 
@@ -98,29 +98,37 @@ function App() {
   }
 
   return (
-    <div>
+    <div className='app-container'>
       <span className="text-danger">{errors.api}</span>
-      <CategoryList
-        categories={categories}
-        onUpdateCategory={fetchCategories}
-      />
-      <input
-        ref={categoryNameRef}
-        type="text"
-        name="name"
-        placeholder="Enter Category"
-        onChange={handleInput}
-        onKeyDown={(e) => handleEnterKey(e, handleAddCategory)}
-        autoFocus
-      />
-      <button onClick={handleAddCategory}>Add Category</button>
-      <button type="button"
-        onClick={() => {
-          logout();
-          navigate('/login');
-        }}
-      >Logout</button>
-      {currentUser && <button type="button" onClick={() => navigate('/editUser')}> Edit {currentUser.username}</button>}
+      <div className='cat-list'>
+        <CategoryList
+          categories={categories}
+          onUpdateCategory={fetchCategories}
+        />
+        <div className='add-category'>
+          <input
+            ref={categoryNameRef}
+            type="text"
+            name="name"
+            placeholder="Enter Category"
+            onChange={handleInput}
+            onKeyDown={(e) => handleEnterKey(e, handleAddCategory)}
+            autoFocus
+          />
+          <button onClick={handleAddCategory}>Add Category</button>
+        </div>
+
+      </div>
+      <div className='user'>
+        <button type="button"
+          onClick={() => {
+            logout();
+            navigate('/login');
+          }}
+        >Logout</button>
+        {currentUser && <button type="button" onClick={() => navigate('/editUser')}> Edit {currentUser.username}</button>}
+      </div>
+
       <span className="text-danger">{errors.name}</span>
       <span className="text-danger">{errors.userId}</span>
     </div>

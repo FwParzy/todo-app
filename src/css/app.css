@@ -1,0 +1,72 @@
+.app-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #19242a;
+  color: #fcfcfc;
+  padding: 2rem;
+  border-radius: 1.5rem;
+}
+
+.user {
+  align-self: flex-start;
+  margin-left: auto;
+  background-color: #424242;
+  color: #fcfcfc;
+  border-radius: .5rem;
+
+
+  button {
+    align-items: right;
+    background-color: #424242;
+    border-radius: .5rem;
+    padding: 0.5rem;
+    color: #fcfcfc;
+    border: none;
+    color: #68bdb0;
+  }
+  button:hover {
+    filter: brightness(120%);
+  }
+}
+
+.cat-list {
+  display: flex;
+  flex-direction: column;
+}
+.add-category {
+  background-color: #424242;
+  color: #fcfcfc;
+  border-radius: .5rem;
+  padding: 0 0 0 0.5rem;
+  width: auto;
+  margin: 1rem auto;
+
+  input {
+    background-color: #424242;
+    color: #fcfcfc;
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: #68bdb0;
+    padding-right: 2rem;
+    margin-right: .5rem;
+  }
+  input:focus {
+    border-color: green;
+  }
+  button {
+    align-items: right;
+    background-color: #424242;
+    border-radius: .5rem;
+    padding-left: .5rem;
+    padding-right: 1rem;
+    color: #fcfcfc;
+    border: none;
+    color: #68bdb0;
+  }
+  button:hover {
+    filter: brightness(120%);
+  }
+
+}
+
