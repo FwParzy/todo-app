@@ -1,50 +1,40 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import TaskEdit from "./TaskEdit";
-import { getCurrentTimestamp, setTaskDeleteTs } from "../utils/timeUtils";
-import { TaskType, ToggleTaskFunction } from "../types/taskTypes";
+import { TaskType } from "../types/taskTypes";
+import { AuthContext } from "../context/authContext";
+import axios from "axios";
+import { TaskCatValidation, TaskCreateValidation } from "../utils/Validations";
 
 interface Props {
   task: TaskType;
-  toggleTask: ToggleTaskFunction;
-  editTask: (updatedTask: TaskType) => void;
+  onUpdateTask: () => void;
+  onUpdateCategory: () => void;
 }
 
 
-const Task = ({ task: initialTask, toggleTask, editTask }: Props) => {
+const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
+  const { currentUser } = useContext(AuthContext);
   const [task, setTask] = useState<TaskType>(initialTask);
-  const firstRender = useRef(true);
 
-  useEffect(() => {
-    // Define the callback function
-    const updateTask = () => {
-      if (task.cancelTs === null) return;
-      if (task.deleteTs !== null) return;
-
-      const updatedTask = setTaskDeleteTs(task);
-      if (!updatedTask) return
-
-      setTask(updatedTask);
-      console.log('Deleted ' + task.name);
-      editTask(updatedTask);
-    };
-
-
-    if (firstRender.current) {
-      updateTask();
-      firstRender.current = false;
-    }
-
-    // Set up the interval to call the callback function every hour
-    const intervalId = setInterval(updateTask, 60 * 60 * 1000);
-    // const intervalId = setInterval(updateTask, 10 * 1000);
-    return () => clearInterval(intervalId);
-  }, [task]);
-
+  const [values, setValues] = useState({
+    id: task.id,
+    userId: currentUser.id,
+    categoryId: task.categoryId,
+    name: task.name,
+    completed: task.completed,
+    createTs: task.createTs,
+    cancelTs: task.cancelTs,
+    deleteTs: task.deleteTs,
+  })
+  const [errors, setErrors] = useState({
+    userId: '',
+    categoryId: '',
+    name: '',
+    api: ''
+  })
 
   const taskNameRef = useRef<HTMLInputElement>(null)
   const [editTaskVisibility, setEditTaskVisibility] = useState(false)
-  const [changedCategory, setChangedCategory] = useState(task.categoryId)
-
 
   // This sets the ref to the name for Task editing
   useEffect(() => {
@@ -58,53 +48,90 @@ const Task = ({ task: initialTask, toggleTask, editTask }: Props) => {
     setTask(initialTask);
   }, [initialTask]);
 
-
-
   function handleTaskPopup() {
     setEditTaskVisibility(!editTaskVisibility)
   }
 
-  function handleEditTask() {
-    const name = taskNameRef.current?.value;
-    if (!name) return
-    if (!changedCategory) return
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setValues(prev => ({ ...prev, [name]: value }))
+  }
 
-    const updatedTask = {
-      ...task,
-      name: name,
-      categoryId: changedCategory
-    };
+  const handleEditTask = async () => {
+    const validationErrors = TaskCreateValidation(values);
+    setErrors(validationErrors);
+    if (validationErrors.name !== ''
+      || validationErrors.userId !== ''
+      || validationErrors.categoryId !== '') return;
 
-    editTask(updatedTask)
-
-    // I know this isnt very react of me, but i am stupid and spent 4 hours
-    // trying to get categories to update from here. This is a compromise
-    if (task.categoryId !== updatedTask.categoryId) window.location.reload();
-
+    try {
+      await axios.post('http://localhost:8081/api/task/updateName', values);
+    } catch (err) {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        api: err.response.data.message
+      }));
+    }
+    onUpdateTask();
     handleTaskPopup()
   }
 
-  function handleDeleteTask() {
-    const deleteTs = getCurrentTimestamp()
-    const cancelTs = getCurrentTimestamp()
-    if (!deleteTs) return
+  const handleDeleteTask = async () => {
+    const validationErrors = TaskCreateValidation(values);
+    setErrors(validationErrors);
+    if (validationErrors.userId !== ''
+      || validationErrors.categoryId !== '') return;
 
-    const updatedTask = {
-      ...task,
-      cancelTs: cancelTs,
-      deleteTs: deleteTs
-    };
-
-    editTask(updatedTask)
+    try {
+      await axios.post('http://localhost:8081/api/task/deleteOne', values);
+    } catch (err) {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        api: err.response.data.message
+      }));
+    }
+    onUpdateTask();
     handleTaskPopup()
   }
 
-  function handleCategoryChange(selectedCategory: string) {
-    setChangedCategory(selectedCategory)
+  const handleTaskClick = async () => {
+    try {
+      await axios.post('http://localhost:8081/api/task/complete', values);
+    } catch (err) {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        api: err.response.data.message
+      }));
+    }
+    onUpdateTask();
   }
 
-  function handleTaskClick() {
-    toggleTask(task.id)
+  const handleCategoryChange = async (selectedCategory: number) => {
+    const values = {
+      id: task.id,
+      userId: currentUser.id,
+      categoryId: task.categoryId,
+      newCatId: selectedCategory
+    }
+    const validationErrors = TaskCatValidation(values);
+    setErrors(prevErrors => ({
+      ...prevErrors,
+      categoryId: validationErrors.categoryId
+    }));
+
+    if (validationErrors.categoryId !== '') return;
+
+    try {
+      await axios.post('http://localhost:8081/api/task/changeCat', values);
+    } catch (err) {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        api: err.response.data.message
+      }));
+    }
+    onUpdateCategory()
+    onUpdateTask()
+    handleTaskPopup()
   }
 
   return (
@@ -112,7 +139,7 @@ const Task = ({ task: initialTask, toggleTask, editTask }: Props) => {
       <div>
         {!editTaskVisibility &&
           <>
-            <input type="checkbox" checked={task.completed} onChange={handleTaskClick} />
+            <input type="checkbox" checked={!!task.completed} onChange={handleTaskClick} />
             <span onClick={handleTaskPopup}>{task.name}</span>
           </>
         }
@@ -122,13 +149,18 @@ const Task = ({ task: initialTask, toggleTask, editTask }: Props) => {
             <TaskEdit
               inputRef={taskNameRef}
               onCancel={handleTaskPopup}
+              onChange={handleInput}
               onOk={handleEditTask}
               onDelete={handleDeleteTask}
               currentCategory={task.categoryId}
               onCategoryChange={handleCategoryChange}
             />
+            <span className="text-danger">{errors.name}</span>
+            <span className="text-danger">{errors.userId}</span>
+            <span className="text-danger">{errors.categoryId}</span>
           </>
         }
+        <span className="text-danger">{errors.api}</span>
       </div>
     )
   )

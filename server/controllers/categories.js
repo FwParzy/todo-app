@@ -2,7 +2,12 @@ import { db } from '../db.js';
 
 export const create = (req, res) => {
   // Check if category already exists for the user
-  const checkQuery = 'SELECT * FROM categories WHERE name = ? AND userId = ?';
+  const checkQuery = `
+    SELECT * FROM tasks
+    WHERE name = ?
+    AND userId = ?
+    AND deleteTs IS NULL
+  `;
 
   db.query(checkQuery, [req.body.name, req.body.userId], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server error: Checking Category Existance' });

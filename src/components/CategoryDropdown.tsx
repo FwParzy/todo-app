@@ -1,24 +1,45 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CategoryType } from "../types/categoryType";
+import axios from "axios";
 import { handleEnterKey } from "../utils/keyboardUtils";
+import { AuthContext } from "../context/authContext";
 
 interface Props {
-  currentCategory: string;
-  onCategoryChange: (categoryId: string) => void;
+  currentCategory: number;
+  onCategoryChange: (categoryId: number) => void;
   onOk: () => void;
 }
 
 export const CategoryDropdown = ({ currentCategory, onCategoryChange, onOk }: Props) => {
-
+  const { currentUser } = useContext(AuthContext);
+  const [categories, setCategories] = useState<CategoryType[]>([]);
   const [selectedCategory, setSelectedCategory] = useState(currentCategory);
-  const storedCategories = JSON.parse(localStorage.getItem('todoApp.categories'));
-  const usedCategories = storedCategories.filter((categoty: CategoryType) => (categoty.deleteTs === null))
+  const [errors, setErrors] = useState({
+    api: ''
+  })
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      if (currentUser) {
+        axios.get(`http://localhost:8081/api/cat/${currentUser.id}`)
+          .then(response => {
+            setCategories(response.data);
+          })
+          .catch(err => {
+            setErrors(prevErrors => ({
+              ...prevErrors,
+              api: err.response.data.message
+            }));
+          });
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newCategoryId = event.target.value;
-    console.log("newCatID " + newCategoryId)
-    setSelectedCategory(newCategoryId)
-    onCategoryChange(newCategoryId)
+    const newCategoryId = Number(event.target.value);
+    setSelectedCategory(newCategoryId);
+    onCategoryChange(newCategoryId);
   };
 
   return (
@@ -28,15 +49,13 @@ export const CategoryDropdown = ({ currentCategory, onCategoryChange, onOk }: Pr
         onChange={handleChange}
         onKeyDown={(e) => handleEnterKey(e as React.KeyboardEvent<HTMLSelectElement>, onOk)}
       >
-        {usedCategories.map((category: CategoryType) => (
-          <option
-            key={category.id}
-            value={category.id}
-          >
+        {categories.map((category: CategoryType) => (
+          <option key={category.id} value={category.id}>
             {category.name}
           </option>
         ))}
       </select>
+      <span className="text-danger">{errors.api}</span>
     </>
-  )
-}
+  );
+};
