@@ -2,13 +2,12 @@ import { db } from '../db.js';
 
 export const create = (req, res) => {
   // Check if Task already exists for the user
-  // const checkQuery = 'SELECT * FROM tasks WHERE name = ? AND userId = ? AND categoryId = ?';
   const checkQuery = `
-SELECT * FROM tasks
-WHERE name = ?
-AND userId = ?
-AND categoryId = ?
-AND deleteTs IS NULL
+    SELECT * FROM tasks
+    WHERE name = ?
+    AND userId = ?
+    AND categoryId = ?
+    AND deleteTs IS NULL
 `;
 
   db.query(checkQuery, [req.body.name, req.body.userId, req.body.categoryId], (err, data) => {
@@ -142,7 +141,6 @@ export const deleteOldTasks = (req, res) => {
     if (err) return res.status(500).json({ message: 'Server error: Fetching tasks' });
 
     if (tasks.length === 0) {
-      console.log(tasks)
       return res.status(200).json({ message: 'No tasks found to delete.' });
     }
 

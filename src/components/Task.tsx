@@ -8,10 +8,11 @@ import { TaskCatValidation, TaskCreateValidation } from "../utils/Validations";
 interface Props {
   task: TaskType;
   onUpdateTask: () => void;
+  onUpdateCategory: () => void;
 }
 
 
-const Task = ({ task: initialTask, onUpdateTask }: Props) => {
+const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
   const { currentUser } = useContext(AuthContext);
   const [task, setTask] = useState<TaskType>(initialTask);
 
@@ -128,7 +129,8 @@ const Task = ({ task: initialTask, onUpdateTask }: Props) => {
         api: err.response.data.message
       }));
     }
-    if (values.categoryId !== values.newCatId) window.location.reload();
+    onUpdateCategory()
+    onUpdateTask()
     handleTaskPopup()
   }
 

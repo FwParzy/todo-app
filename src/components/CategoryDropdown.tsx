@@ -14,6 +14,9 @@ export const CategoryDropdown = ({ currentCategory, onCategoryChange, onOk }: Pr
   const { currentUser } = useContext(AuthContext);
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [selectedCategory, setSelectedCategory] = useState(currentCategory);
+  const [errors, setErrors] = useState({
+    api: ''
+  })
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -22,8 +25,11 @@ export const CategoryDropdown = ({ currentCategory, onCategoryChange, onOk }: Pr
           .then(response => {
             setCategories(response.data);
           })
-          .catch(error => {
-            console.error("Error fetching categories:", error);
+          .catch(err => {
+            setErrors(prevErrors => ({
+              ...prevErrors,
+              api: err.response.data.message
+            }));
           });
       }
     };
@@ -49,6 +55,7 @@ export const CategoryDropdown = ({ currentCategory, onCategoryChange, onOk }: Pr
           </option>
         ))}
       </select>
+      <span className="text-danger">{errors.api}</span>
     </>
   );
 };

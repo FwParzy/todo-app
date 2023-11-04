@@ -24,23 +24,6 @@ function App() {
 
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const categoryNameRef = useRef<HTMLInputElement>(null)
-
-  const fetchCategories = () => {
-    if (currentUser) {
-      axios.get(`http://localhost:8081/api/cat/${currentUser.id}`)
-        .then(response => {
-          setCategories(response.data);
-        })
-        .catch(error => {
-          console.error("Error fetching categories:", error);
-        });
-    }
-  }
-  // Populate the page with categories api
-  useEffect(() => {
-    fetchCategories()
-  }, [currentUser]);
-
   const [values, setValues] = useState({
     name: '',
     userId: currentUser.id
@@ -50,6 +33,24 @@ function App() {
     userId: '',
     api: ''
   })
+
+  const fetchCategories = () => {
+    if (!currentUser) return
+    axios.get(`http://localhost:8081/api/cat/${currentUser.id}`)
+      .then(response => {
+        setCategories(response.data);
+      })
+      .catch(err => {
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          api: err.response.data.message
+        }));
+      });
+  }
+  // Populate the page with categories api
+  useEffect(() => {
+    fetchCategories()
+  }, [currentUser]);
 
   // This effectively deletes completed tasks at midnight
   useEffect(() => {
@@ -65,9 +66,9 @@ function App() {
     };
 
     if (firstRender.current) {
-    updateTasks();
-    firstRender.current = false;
-  }
+      updateTasks();
+      firstRender.current = false;
+    }
 
     // Set up the interval to call the callback function every hour
     const intervalId = setInterval(updateTasks, 60 * 60 * 1000);

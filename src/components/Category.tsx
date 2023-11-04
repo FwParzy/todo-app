@@ -37,15 +37,18 @@ const Category = ({ category, onUpdateCategory }: Props) => {
         .then(response => {
           setTasks(response.data);
         })
-        .catch(error => {
-          console.error("Error fetching categories:", error);
+        .catch(err => {
+          setErrors(prevErrors => ({
+            ...prevErrors,
+            api: err.response.data.message
+          }));
         });
     }
   }
   // Populate the page with categories api
   useEffect(() => {
     fetchTasks()
-  }, [currentUser]);
+  }, [currentUser, category]);
 
   const [values, setValues] = useState({
     name: '',
@@ -103,7 +106,10 @@ const Category = ({ category, onUpdateCategory }: Props) => {
     try {
       await axios.post('http://localhost:8081/api/cat/updateName', values);
     } catch (err) {
-      console.error(err.response.data.message)
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        api: err.response.data.message
+      }));
     }
     onUpdateCategory();
     setIsCategoryEditVisible(false);
@@ -122,7 +128,10 @@ const Category = ({ category, onUpdateCategory }: Props) => {
       await axios.post('http://localhost:8081/api/cat/delete', values);
       await axios.post('http://localhost:8081/api/task/deleteCat', values);
     } catch (err) {
-      console.error(err.response.data.message)
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        api: err.response.data.message
+      }));
     }
     onUpdateCategory();
     setIsCategoryEditVisible(false);
@@ -179,6 +188,7 @@ const Category = ({ category, onUpdateCategory }: Props) => {
           tasks={tasks}
           category={category.id}
           onUpdateTask={fetchTasks}
+          onUpdateCategory={onUpdateCategory}
         />
 
       </div>
