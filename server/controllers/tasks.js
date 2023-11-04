@@ -8,7 +8,7 @@ export const create = (req, res) => {
     AND userId = ?
     AND categoryId = ?
     AND deleteTs IS NULL
-`;
+  `;
 
   db.query(checkQuery, [req.body.name, req.body.userId, req.body.categoryId], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server error: Checking Task Existance' });
@@ -95,7 +95,7 @@ export const completeOne = (req, res) => {
       SET completed = NOT completed,
           cancelTs = CASE WHEN completed THEN Now() ELSE NULL END
       WHERE id = ?
-`;
+    `;
 
     db.query(completeTaskQuery, [req.body.id], (err) => {
       if (err) return res.status(500).json({ message: 'Server error: Error toggling the task status' });
@@ -117,7 +117,7 @@ export const updateCategory = (req, res) => {
       UPDATE tasks
       SET categoryId = ?
       WHERE id = ?
-`;
+    `;
 
     db.query(changeCatQuery, [req.body.newCatId, req.body.id], (err) => {
       if (err) return res.status(500).json({ message: 'Server error: Changing task Category' });
@@ -147,7 +147,6 @@ export const deleteOldTasks = (req, res) => {
     // Extract task names and unique category IDs
     const taskNames = tasks.map(task => task.name);
     const categoryIds = [...new Set(tasks.map(task => task.categoryId))];
-
 
     // Set Delete Timestamp for all tasks that were selected
     const deleteQuery = `
@@ -191,12 +190,12 @@ export const deleteAllInCat = (req, res) => {
 
     // SQL query to set deleteTs to NOW() for all tasks in the given category
     const deleteQuery = `
-UPDATE tasks
-SET deleteTs = NOW()
-WHERE userId = ?
-AND categoryId = ?
-AND deleteTs IS NULL;
-`;
+      UPDATE tasks
+      SET deleteTs = NOW()
+      WHERE userId = ?
+      AND categoryId = ?
+      AND deleteTs IS NULL;
+    `;
 
     db.query(deleteQuery, [req.body.userId, req.body.id], (err, data) => {
       if (err) {

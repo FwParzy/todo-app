@@ -72,7 +72,6 @@ function App() {
 
     // Set up the interval to call the callback function every hour
     const intervalId = setInterval(updateTasks, 60 * 60 * 1000);
-    // const intervalId = setInterval(updateTasks, 10 * 1000);
     return () => clearInterval(intervalId);
   }, []);
 

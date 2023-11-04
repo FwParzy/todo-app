@@ -190,7 +190,6 @@ const Category = ({ category, onUpdateCategory }: Props) => {
           onUpdateTask={fetchTasks}
           onUpdateCategory={onUpdateCategory}
         />
-
       </div>
     )
   )

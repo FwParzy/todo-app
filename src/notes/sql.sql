@@ -26,7 +26,7 @@ CREATE TABLE categories (
 
 TRUNCATE TABLE tasks;
 
- UPDATE tasks SET cancelTs = CURDATE() - INTERVAL 1 DAY WHERE id = 3;
+-- Delete at midnight queries
     SELECT * FROM tasks
     WHERE userId = 1
     AND completed = 1
@@ -34,6 +34,7 @@ TRUNCATE TABLE tasks;
     AND deleteTs IS NULL
     AND DATE(cancelTs) < CURDATE();
 
+    UPDATE tasks SET cancelTs = CURDATE() - INTERVAL 1 DAY WHERE id = 3;
 
 CREATE TABLE tasks (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -47,4 +48,3 @@ CREATE TABLE tasks (
     FOREIGN KEY (categoryId) REFERENCES categories(id),
     FOREIGN KEY (userId) REFERENCES users(id)
 );
-
