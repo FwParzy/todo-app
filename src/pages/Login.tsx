@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { LoginValidation } from "../utils/Validations";
 import { AuthContext } from '../context/authContext';
 import axios from "axios";
+import "../css/login.css"
 
 const Login = () => {
   const navigate = useNavigate();
@@ -41,26 +42,28 @@ const Login = () => {
     }
   }
 
-  return (
-    <div className="d-flex justify-content-center align-items-center bg-primary vh-100">
-      <div className="bg-white p-3 rounded w-25">
+return (
+    <div className="login-container">
+      <div className="login-box">
         <h2>Log In</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="username"><strong>Username</strong></label>
+            <label htmlFor="username" className="login-label">Username</label>
             <input type="text" placeholder="Enter username" onChange={handleInput} name="username"
-              className="form-control rounded-0" />
+              className="form-control login-input" />
             {errors.username && <span className="text-danger">{errors.username}</span>}
           </div>
           <div className="mb-3">
-            <label htmlFor="password"><strong>Password</strong> </label>
+            <label htmlFor="password" className="login-label">Password</label>
             <input type="password" placeholder="Enter password" onChange={handleInput} name="password"
-              className="form-control rounded-0" />
+              className="form-control login-input" />
             {errors.password && <span className="text-danger">{errors.password}</span>}
           </div>
-          <button type="submit" className="btn btn-success w-100 mb-1"><strong>Log in</strong></button>
+          <button type="submit" className="login-button"><strong>Log in</strong></button>
           <span className="text-danger">{errors.api}</span>
-          <Link to="/register" className="btn btn-default border w-100 bg-light">Register</Link>
+          <button type="button"  className="login-register-btn">
+            <Link to="/register" className="login-register-link">Register</Link>
+          </button>
         </form>
       </div>
     </div>

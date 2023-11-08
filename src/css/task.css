@@ -1,0 +1,30 @@
+.circle-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.circle-checkbox .clickable-area {
+  width: 0.75rem;
+  height: 0.75rem;
+  cursor: pointer;
+}
+
+.circle-checkbox input[type="checkbox"] + .clickable-area:before {
+  content: "";
+  display: inline-block;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  border: 1px solid #68bdb0;
+  margin-right: 0.75rem;
+  margin-left: 0.75rem;
+  vertical-align: middle;
+}
+
+.circle-checkbox input[type="checkbox"]:checked + .clickable-area:before {
+  background-color: #68bdb0;
+}
+
+.circle-checkbox input[type="checkbox"]:checked + .clickable-area + span {
+  text-decoration: line-through;
+  color: #aaa;
+}

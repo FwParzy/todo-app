@@ -1,0 +1,36 @@
+.dropdown-container {
+  background-color: #424242;
+  border: 1px solid #68bdb0;
+  border-radius: 0.25rem 0.25rem 0 0;
+  border-width: 0 0 2px;
+  border-color: #68bdb0;
+  color: #fcfcfc;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+
+  &:hover {
+    background-color: #5aa897;
+    color: #fcfcfc;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #68bdb0;
+  }
+}
+
+.dropdown-menu {
+  background-color: #343434;
+  color: #fcfcfc;
+}
+
+.dropdown-item {
+  background-color: #343434;
+  color: #fcfcfc;
+  &:hover {
+    background-color: #68bdb0;
+    color: #fcfcfc;
+  }
+}

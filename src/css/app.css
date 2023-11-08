@@ -1,32 +1,35 @@
 .app-container {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
   background-color: #19242a;
   color: #fcfcfc;
   padding: 2rem;
-  border-radius: 1.5rem;
+  min-height: 100vh;
+  width: 630px;
 }
 
 .user {
-  align-self: flex-start;
   margin-left: auto;
   background-color: #424242;
   color: #fcfcfc;
   border-radius: .5rem;
 
 
-  button {
+  .user-btns {
     align-items: right;
     background-color: #424242;
     border-radius: .5rem;
     padding: 0.5rem;
-    color: #fcfcfc;
     border: none;
     color: #68bdb0;
   }
-  button:hover {
-    filter: brightness(120%);
+  .user-btns:hover {
+    background-color: #5aa897;
+    color: #fcfcfc;
+  }
+  .user-btns.active {
+    background-color: #5aa897;
+    color: #fcfcfc;
   }
 }
 
@@ -42,7 +45,7 @@
   width: auto;
   margin: 1rem auto;
 
-  input {
+  .app-input {
     background-color: #424242;
     color: #fcfcfc;
     outline: 0;
@@ -51,21 +54,21 @@
     padding-right: 2rem;
     margin-right: .5rem;
   }
-  input:focus {
+  .app-input:focus {
     border-color: green;
   }
-  button {
+  .app-input-btn {
     align-items: right;
     background-color: #424242;
     border-radius: .5rem;
     padding-left: .5rem;
     padding-right: 1rem;
-    color: #fcfcfc;
     border: none;
     color: #68bdb0;
   }
-  button:hover {
-    filter: brightness(120%);
+  .app-input-btn:hover {
+    background-color: #5aa897;
+    color: #fcfcfc;
   }
 
 }

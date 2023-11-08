@@ -22,11 +22,12 @@ function App() {
     }
   }, [currentUser, navigate]);
 
+  const [newCategoryVisibility, setNewCategoryVisibility] = useState(false)
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const categoryNameRef = useRef<HTMLInputElement>(null)
   const [values, setValues] = useState({
     name: '',
-    userId: currentUser.id
+    userId: currentUser?.id
   })
   const [errors, setErrors] = useState({
     name: '',
@@ -75,6 +76,10 @@ function App() {
     return () => clearInterval(intervalId);
   }, []);
 
+  function toggleNewCatVisibility() {
+    setNewCategoryVisibility(!newCategoryVisibility)
+  }
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setValues(prev => ({ ...prev, [name]: value }))
@@ -99,36 +104,47 @@ function App() {
 
   return (
     <div className='app-container'>
+      <div className='user'>
+        <button type="button"
+          className={`user-btns ${newCategoryVisibility ? 'active' : ''}`}
+          onClick={toggleNewCatVisibility} >Add a Category</button>
+        <button type="button"
+          className='user-btns'
+          onClick={() => {
+            logout();
+            navigate('/login');
+          }}
+        >Logout</button>
+        {currentUser && <button
+          type="button"
+          className='user-btns'
+          onClick={() => navigate('/editUser')}
+        >Edit {currentUser.username}</button>}
+      </div>
+
       <span className="text-danger">{errors.api}</span>
       <div className='cat-list'>
         <CategoryList
           categories={categories}
           onUpdateCategory={fetchCategories}
         />
+        {newCategoryVisibility &&
         <div className='add-category'>
           <input
+            className='app-input'
             ref={categoryNameRef}
             type="text"
             name="name"
             placeholder="Enter Category"
             onChange={handleInput}
-            onKeyDown={(e) => handleEnterKey(e, handleAddCategory)}
+            onKeyDown={(e) => handleEnterKey(e, handleAddCategory )}
             autoFocus
           />
-          <button onClick={handleAddCategory}>Add Category</button>
+          <button className='app-input-btn' onClick={handleAddCategory}>Add Category</button>
         </div>
+        }
 
       </div>
-      <div className='user'>
-        <button type="button"
-          onClick={() => {
-            logout();
-            navigate('/login');
-          }}
-        >Logout</button>
-        {currentUser && <button type="button" onClick={() => navigate('/editUser')}> Edit {currentUser.username}</button>}
-      </div>
-
       <span className="text-danger">{errors.name}</span>
       <span className="text-danger">{errors.userId}</span>
     </div>
