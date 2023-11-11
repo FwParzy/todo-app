@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen } from 'electron'
+import { app, BrowserWindow, globalShortcut, screen } from 'electron'
 import path from 'node:path'
 
 // The built directory structure
@@ -17,6 +17,20 @@ process.env.VITE_PUBLIC = app.isPackaged ? process.env.DIST : path.join(process.
 let win: BrowserWindow | null
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
 const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
+
+function registerGlobalShortcut() {
+  const ret = globalShortcut.register('CommandOrControl+Shift+Alt+I', () => {
+    console.log('Global shortcut activated');
+    if (win) {
+      if (win.isMinimized()) win.restore();
+      win.focus();
+    }
+  });
+
+  if (!ret) {
+    console.log('registration failed')
+  }
+}
 
 function createWindow() {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
@@ -64,4 +78,11 @@ app.on('activate', () => {
   }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createWindow();
+  registerGlobalShortcut(); // Register the shortcut after the app is ready
+});
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll();
+});
