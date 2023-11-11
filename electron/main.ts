@@ -1,5 +1,6 @@
-import { app, BrowserWindow, screen } from 'electron'
+import { app, BrowserWindow, globalShortcut, screen } from 'electron'
 import path from 'node:path'
+import os from 'os';
 
 // The built directory structure
 //
@@ -18,11 +19,31 @@ let win: BrowserWindow | null
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
 const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
+function registerGlobalShortcut() {
+  const ret = globalShortcut.register('CommandOrControl+Shift+Alt+I', () => {
+    if (win) {
+      if (win.isMinimized()) win.restore();
+      win.focus();
+    }
+  });
+
+  if (!ret) {
+    console.log('registration failed')
+  }
+}
+
 function createWindow() {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
-  const windowWidth = Math.round(width * 0.33);
-  const windowHeight = Math.round(height * 0.75);
+  let windowWidth = Math.round(width * 0.33);
+  let windowHeight = Math.round(height * 0.75);
+
+  // Adjust size for Windows
+  if (os.platform() === 'win32') {
+    windowWidth = Math.round(width * 0.42);
+    windowHeight = Math.round(height * 0.90);
+  }
+
   win = new BrowserWindow({
     width: windowWidth,
     height: windowHeight,
@@ -64,4 +85,11 @@ app.on('activate', () => {
   }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createWindow();
+  registerGlobalShortcut(); // Register the shortcut after the app is ready
+});
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll();
+});
