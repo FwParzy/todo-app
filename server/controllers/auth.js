@@ -1,4 +1,4 @@
-import { db } from '../db.js';
+import { executeQuery } from '../db.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -6,7 +6,7 @@ export const register = (req, res) => {
   // Check if user exists
   const q = 'SELECT * FROM users WHERE email = ? OR username = ?';
 
-  db.query(q, [req.body.email, req.body.username], (err, data) => {
+  executeQuery(q, [req.body.email, req.body.username], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server error: Checking Existance' });
     if (data.length)
       return res.status(409).json({ message: 'User already exists' });
@@ -18,7 +18,7 @@ export const register = (req, res) => {
     const q = 'INSERT INTO users (`username`, `email`, `password`) VALUES (?, ?, ?)';
     const values = [req.body.username, req.body.email, hash];
 
-    db.query(q, values, (err) => {
+    executeQuery(q, values, (err) => {
       if (err) return res.status(500).json({ message: 'Server error: Inserting User' });
       return res.status(200).json({ message: 'User was created.' });
     });
@@ -29,7 +29,7 @@ export const login = (req, res) => {
   // Check if user exists
   const q = 'SELECT * FROM users WHERE username = ?';
 
-  db.query(q, [req.body.username], (err, data) => {
+  executeQuery(q, [req.body.username], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server error: Checking db for Username' });
     if (data.length === 0)
       return res.status(404).json({ message: 'User not found' });
@@ -75,7 +75,7 @@ export const editUser = (req, res) => {
   const checkUserQuery = 'SELECT * FROM users WHERE id != ? AND (email = ? OR username = ?)';
   const values = [req.body.id, req.body.email, req.body.username];
 
-  db.query(checkUserQuery, values, (err, results) => {
+  executeQuery(checkUserQuery, values, (err, results) => {
     if (err) {
       console.error("Database error:", err);
       return res.status(500).json({ message: 'Server error: Checking Existence' });
@@ -99,7 +99,7 @@ export const editUser = (req, res) => {
     updateUserQuery += ' WHERE id = ?';
     values.push(req.body.id);
 
-    db.query(updateUserQuery, values, (err) => {
+    executeQuery(updateUserQuery, values, (err) => {
       if (err) {
         console.error("Database error:", err);
         return res.status(500).json({ message: 'Server error: Updating User' });
@@ -107,7 +107,7 @@ export const editUser = (req, res) => {
 
       // After updating, retrieve the updated user details
       const retrieveUserQuery = 'SELECT * FROM users WHERE id = ?';
-      db.query(retrieveUserQuery, [req.body.id], (err, data) => {
+      executeQuery(retrieveUserQuery, [req.body.id], (err, data) => {
         if (err) {
           console.error("Database error:", err);
           return res.status(500).json({ message: 'Server error: Retrieving Updated User' });

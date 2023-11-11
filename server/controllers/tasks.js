@@ -1,7 +1,6 @@
-import { db } from '../db.js';
+import { executeQuery } from '../db.js';
 
 export const create = (req, res) => {
-  // Check if Task already exists for the user
   const checkQuery = `
     SELECT * FROM tasks
     WHERE name = ?
@@ -10,16 +9,13 @@ export const create = (req, res) => {
     AND deleteTs IS NULL
   `;
 
-  db.query(checkQuery, [req.body.name, req.body.userId, req.body.categoryId], (err, data) => {
-    if (err) return res.status(500).json({ message: 'Server error: Checking Task Existance' });
+executeQuery(checkQuery, [req.body.name, req.body.userId, req.body.categoryId], (err, data) => {
+    if (err) return res.status(500).json({ message: 'Server error: Checking Task Existence' });
     if (data.length)
       return res.status(409).json({ message: 'Task already exists for this user' });
 
-    // Insert new Task
-    const insertQuery = 'INSERT INTO tasks (`name`, `userId`, `categoryId`) VALUES (?, ?, ?)';
-    const values = [req.body.name, req.body.userId, req.body.categoryId];
-
-    db.query(insertQuery, values, (err) => {
+    const insertQuery = 'INSERT INTO tasks (name, userId, categoryId) VALUES (?, ?, ?)';
+    executeQuery(insertQuery, [req.body.name, req.body.userId, req.body.categoryId], (err) => {
       if (err) return res.status(500).json({ message: 'Server error: Inserting Task' });
       return res.status(200).json({ message: 'Task was created.' });
     });
@@ -36,7 +32,7 @@ export const getTasks = (req, res) => {
       AND deleteTs IS NULL
   `;
 
-  db.query(query, [userId, catId], (err, data) => {
+  executeQuery(query, [userId, catId], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server error: Fetching tasks' });
     return res.status(200).json(data);
   });
@@ -51,7 +47,7 @@ export const getAllTasks = (req, res) => {
       AND deleteTs IS NULL
   `;
 
-  db.query(query, [userId], (err, data) => {
+  executeQuery(query, [userId], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server error: Fetching tasks' });
     return res.status(200).json(data);
   });
@@ -60,7 +56,7 @@ export const getAllTasks = (req, res) => {
 export const deleteOne = (req, res) => {
   const query = 'SELECT * FROM tasks WHERE userId = ? AND id = ?';
 
-  db.query(query, [req.body.userId, req.body.id], (err, data) => {
+  executeQuery(query, [req.body.userId, req.body.id], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server error: Fetching tasks' });
     if (data.length === 0) {
       return res.status(404).json({ message: 'Task not found' });
@@ -69,7 +65,7 @@ export const deleteOne = (req, res) => {
     // Set Delete Timestamp
     const deleteQuery = 'UPDATE tasks SET deleteTs = Now() WHERE id = ?'
 
-    db.query(deleteQuery, [req.body.id], (err) => {
+    executeQuery(deleteQuery, [req.body.id], (err) => {
       if (err) return res.status(500).json({ message: 'Server error: Deleting Task' });
       return res.status(200).json({ message: 'Task was deleted.' });
     });
@@ -79,7 +75,7 @@ export const deleteOne = (req, res) => {
 export const updateName = (req, res) => {
   const query = 'SELECT * FROM tasks WHERE userId = ? AND id = ?';
 
-  db.query(query, [req.body.userId, req.body.id], (err, data) => {
+  executeQuery(query, [req.body.userId, req.body.id], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server error: Fetching tasks' });
     if (data.length === 0)
       return res.status(404).json({ message: 'Task not found' });
@@ -89,7 +85,7 @@ export const updateName = (req, res) => {
     // Set new name
     let newNameQuery = 'UPDATE tasks SET name = ? WHERE id = ?'
 
-    db.query(newNameQuery, [req.body.name, req.body.id], (err) => {
+    executeQuery(newNameQuery, [req.body.name, req.body.id], (err) => {
       if (err) return res.status(500).json({ message: 'Server error: Changing Task Name' });
       return res.status(200).json({ message: 'Task name was changed.' });
     });
@@ -99,7 +95,7 @@ export const updateName = (req, res) => {
 export const completeOne = (req, res) => {
   const query = 'SELECT * FROM tasks WHERE userId = ? AND id = ?';
 
-  db.query(query, [req.body.userId, req.body.id], (err, data) => {
+  executeQuery(query, [req.body.userId, req.body.id], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server error: Fetching tasks' });
     if (data.length === 0)
       return res.status(404).json({ message: 'Task not found' });
@@ -112,7 +108,7 @@ export const completeOne = (req, res) => {
       WHERE id = ?
     `;
 
-    db.query(completeTaskQuery, [req.body.id], (err) => {
+    executeQuery(completeTaskQuery, [req.body.id], (err) => {
       if (err) return res.status(500).json({ message: 'Server error: Error toggling the task status' });
       return res.status(200).json({ message: 'Task was completed' });
     });
@@ -122,7 +118,7 @@ export const completeOne = (req, res) => {
 export const updateCategory = (req, res) => {
   const query = 'SELECT * FROM tasks WHERE userId = ? AND id = ?';
 
-  db.query(query, [req.body.userId, req.body.id], (err, data) => {
+  executeQuery(query, [req.body.userId, req.body.id], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server error: Fetching tasks' });
     if (data.length === 0)
       return res.status(404).json({ message: 'Task not found' });
@@ -134,7 +130,7 @@ export const updateCategory = (req, res) => {
       WHERE id = ?
     `;
 
-    db.query(changeCatQuery, [req.body.newCatId, req.body.id], (err) => {
+    executeQuery(changeCatQuery, [req.body.newCatId, req.body.id], (err) => {
       if (err) return res.status(500).json({ message: 'Server error: Changing task Category' });
       return res.status(200).json({ message: 'Task category was changed' });
     });
@@ -152,7 +148,7 @@ export const deleteOldTasks = (req, res) => {
   `;
 
   if (!req.body.userId) return res.status(500).json({ message: 'Server error: No user ID' });
-  db.query(query, [req.body.userId], (err, tasks) => {
+  executeQuery(query, [req.body.userId], (err, tasks) => {
     if (err) return res.status(500).json({ message: 'Server error: Fetching tasks' });
 
     if (tasks.length === 0) {
@@ -174,7 +170,7 @@ export const deleteOldTasks = (req, res) => {
       AND DATE(cancelTs) < CURDATE();
     `;
 
-    db.query(deleteQuery, [req.body.userId], (err, updateResult) => {
+    executeQuery(deleteQuery, [req.body.userId], (err, updateResult) => {
       if (err) return res.status(500).json({ message: 'Server error: Deleting tasks' });
 
       // Check if tasks were deleted
@@ -198,7 +194,7 @@ export const deleteAllInCat = (req, res) => {
 
   const query = 'SELECT * FROM tasks WHERE userId = ? AND categoryId = ? AND deleteTs IS NULL';
 
-  db.query(query, [req.body.userId, req.body.id], (err, data) => {
+  executeQuery(query, [req.body.userId, req.body.id], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server error: Fetching tasks under your category' });
     if (data.length === 0)
       return res.status(200).json({ message: 'Category was empty' });
@@ -212,7 +208,7 @@ export const deleteAllInCat = (req, res) => {
       AND deleteTs IS NULL;
     `;
 
-    db.query(deleteQuery, [req.body.userId, req.body.id], (err, data) => {
+    executeQuery(deleteQuery, [req.body.userId, req.body.id], (err, data) => {
       if (err) {
         console.error('Error deleting tasks:', err);
         return res.status(500).json({ message: 'Server error: Deleting tasks' });

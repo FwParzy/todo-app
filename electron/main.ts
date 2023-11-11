@@ -1,4 +1,5 @@
 import { app, BrowserWindow, globalShortcut, screen } from 'electron'
+import { initDatabase } from '../server/db.js';
 import path from 'node:path'
 import os from 'os';
 
@@ -86,6 +87,7 @@ app.on('activate', () => {
 })
 
 app.whenReady().then(() => {
+  initDatabase();
   createWindow();
   registerGlobalShortcut(); // Register the shortcut after the app is ready
 });
