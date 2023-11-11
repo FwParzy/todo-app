@@ -1,16 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { CategoryType } from "../types/categoryType";
 import axios from "axios";
-import { handleEnterKey } from "../utils/keyboardUtils";
 import { AuthContext } from "../context/authContext";
+import Dropdown from 'react-bootstrap/Dropdown';
+import "../css/categoryDropdown.css"
+
 
 interface Props {
   currentCategory: number;
   onCategoryChange: (categoryId: number) => void;
-  onOk: () => void;
 }
 
-export const CategoryDropdown = ({ currentCategory, onCategoryChange, onOk }: Props) => {
+export const CategoryDropdown = ({ currentCategory, onCategoryChange }: Props) => {
   const { currentUser } = useContext(AuthContext);
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [selectedCategory, setSelectedCategory] = useState(currentCategory);
@@ -34,28 +35,36 @@ export const CategoryDropdown = ({ currentCategory, onCategoryChange, onOk }: Pr
       }
     };
     fetchCategories();
-  }, []);
+  }, [currentUser]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newCategoryId = Number(event.target.value);
-    setSelectedCategory(newCategoryId);
-    onCategoryChange(newCategoryId);
+  const handleChange = (categoryId: number) => {
+    setSelectedCategory(categoryId);
+    onCategoryChange(categoryId);
   };
 
   return (
-    <>
-      <select
-        value={selectedCategory}
-        onChange={handleChange}
-        onKeyDown={(e) => handleEnterKey(e as React.KeyboardEvent<HTMLSelectElement>, onOk)}
-      >
-        {categories.map((category: CategoryType) => (
-          <option key={category.id} value={category.id}>
-            {category.name}
-          </option>
-        ))}
-      </select>
-      <span className="text-danger">{errors.api}</span>
-    </>
+    <div>
+      <Dropdown>
+        <Dropdown.Toggle
+          variant="secondary"
+          id="category-dropdown"
+          className="dropdown-container">
+          {categories.find(cat => cat.id === selectedCategory)?.name || 'Select Category'}
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu className="dropdown-menu">
+          {categories.map((category: CategoryType) => (
+            <Dropdown.Item
+              key={category.id}
+              className="dropdown-item"
+              onClick={() => handleChange(category.id)}
+            >
+              {category.name}
+            </Dropdown.Item>
+          ))}
+        </Dropdown.Menu>
+      </Dropdown>
+      {errors.api && <span className="text-danger">{errors.api}</span>}
+    </div>
   );
 };

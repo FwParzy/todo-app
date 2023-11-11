@@ -1,0 +1,123 @@
+.task-edit {
+  background-color: #424242;
+  color: #fcfcfc;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: column;
+
+  .task-input {
+    background-color: transparent;
+    color: #fcfcfc;
+    outline: none;
+    border-width: 0 0 2px;
+    border-color: #343434;
+    padding: 0.5rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    transition: border-color 0.3s ease-in-out;
+
+    &:focus {
+      border-color: #68bdb0;
+    }
+  }
+
+  .task-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0.5rem 1rem 0.5rem;
+
+    .task-check {
+      margin-right: 0.5rem;
+    }
+
+    .task-span {
+      margin-right: auto;
+      color: #fcfcfc;
+    }
+
+    .custom-checkbox input[type="checkbox"] {
+      visibility: hidden;
+      position: absolute;
+    }
+
+    .custom-checkbox .checkmark {
+      position: relative;
+      height: 0.8em;
+      width: 0.8em;
+      background-color: #fff;
+      display: inline-block;
+      border-radius: 3px;
+      cursor: pointer;
+      vertical-align: auto;
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked + .checkmark {
+      background-color: #68bdb0;
+    }
+
+    .custom-checkbox .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked + .checkmark:after {
+      display: block;
+    }
+
+    .custom-checkbox .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 50%;
+      top: 50%;
+      width: 5px;
+      height: 10px;
+      border: solid black;
+      border-width: 0 2px 2px 0;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+  }
+
+  .task-btns {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .task-btn {
+    border-radius: 0.25rem;
+    background-color: transparent;
+    color: #68bdb0;
+    border: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 0.5rem 0 0.5rem;
+
+    &:hover {
+      background-color: #5aa897;
+      color: #fcfcfc;
+    }
+
+  }
+
+  .task-del {
+    margin-right: auto;
+
+    &:hover {
+      background-color: #BF1029;
+    }
+  }
+
+  .task-cancel:hover {
+    background-color:  #FFF49B;
+    color: black;
+  }
+
+  .task-ok {
+    padding: 0 1rem 0 1rem;
+  }
+}

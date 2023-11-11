@@ -1,0 +1,78 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #19242a;
+  color: #fcfcfc;
+  padding: 2rem;
+  min-height: 100vh;
+  width: 630px;
+}
+
+.user {
+  margin-left: auto;
+  background-color: #424242;
+  color: #fcfcfc;
+  border-radius: .5rem;
+
+  .user-btns {
+    align-items: right;
+    background-color: #424242;
+    border-radius: .5rem;
+    padding: 0.5rem;
+    border: none;
+    color: #68bdb0;
+  }
+
+  .user-btns:hover {
+    background-color: #5aa897;
+    color: #fcfcfc;
+  }
+
+  .user-btns.active {
+    background-color: #5aa897;
+    color: #fcfcfc;
+  }
+}
+
+.cat-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-category {
+  background-color: #424242;
+  color: #fcfcfc;
+  border-radius: .5rem;
+  padding: 0 0 0 0.5rem;
+  width: auto;
+  margin: 1rem auto;
+
+  .app-input {
+    background-color: #424242;
+    color: #fcfcfc;
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: #68bdb0;
+    padding-right: 2rem;
+    margin-right: .5rem;
+  }
+
+  .app-input:focus {
+    border-color: green;
+  }
+
+  .app-input-btn {
+    align-items: right;
+    background-color: #424242;
+    border-radius: .5rem;
+    padding-left: .5rem;
+    padding-right: 1rem;
+    border: none;
+    color: #68bdb0;
+  }
+
+  .app-input-btn:hover {
+    background-color: #5aa897;
+    color: #fcfcfc;
+  }
+}

@@ -3,6 +3,7 @@ import { useContext, useEffect, useRef, useState } from "react"
 import { EditUserValidation } from "../utils/Validations"
 import axios from "axios"
 import { AuthContext } from "../context/authContext"
+import "../css/user-forms.css"
 
 const EditUser = () => {
   const { currentUser, editUser } = useContext(AuthContext);
@@ -74,38 +75,55 @@ const EditUser = () => {
   }
 
   return (
-    <div className="d-flex justify-content-center align-items-center bg-primary vh-100">
-      <div className="bg-white p-3 rounded w-25">
+    <div className="container">
+      <div className="form-box">
         <h2>Edit Profile</h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="username"><strong>Username</strong></label>
-            <input type="username" ref={usernameEditRef} onChange={handleInput} name="username"
-              className="form-control rounded-0" />
+          <div>
+            <label htmlFor="username" className="input-label">Username</label>
+            <input
+              type="username"
+              ref={usernameEditRef}
+              onChange={handleInput}
+              name="username"
+              className="form-control text-input" />
             {errors.username && <span className="text-danger">{errors.username}</span>}
           </div>
-          <div className="mb-3">
-            <label htmlFor="email"><strong>Email</strong></label>
-            <input type="email" ref={emailEditRef} onChange={handleInput} name="email"
-              className="form-control rounded-0" />
+          <div>
+            <label htmlFor="email" className="input-label">Email</label>
+            <input
+              type="email"
+              ref={emailEditRef}
+              onChange={handleInput}
+              name="email"
+              className="form-control text-input" />
             {errors.email && <span className="text-danger">{errors.email}</span>}
           </div>
-          <div className="mb-3">
-            <label htmlFor="password"><strong>Password</strong> </label>
-            <input type="password" placeholder="Enter new password" onChange={handleInput} name="password"
-              className="form-control rounded-0" />
+          <div>
+            <label htmlFor="password" className="input-label">Password </label>
+            <input
+              type="password"
+              placeholder="Enter new password"
+              onChange={handleInput}
+              name="password"
+              className="form-control text-input" />
             {errors.password && <span className="text-danger">{errors.password}</span>}
           </div>
-          <div className="mb-3">
-            <label htmlFor="passwordConfirm"><strong>Confirm Password</strong> </label>
-            <input type="password" placeholder="Confirm new password" onChange={handleInput} name="passwordConfirm"
-              className="form-control rounded-0" />
-            {errors.passwordConfirm && <span className="text-danger">{errors.passwordConfirm}</span>}
+          <div>
+            <label htmlFor="passwordConfirm" className="input-label">Confirm Password </label>
+            <input
+              type="password"
+              placeholder="Confirm new password"
+              onChange={handleInput}
+              name="passwordConfirm"
+              className="form-control text-input" />
+            {errors.passwordConfirm &&
+              <span className="text-danger">{errors.passwordConfirm}</span>}
           </div>
-          <button type="submit" className="btn btn-success w-100 mb-1"><strong>Update Profile</strong></button>
+          <button type="submit" className="submit-btn">Update Profile</button>
           <span className="text-danger">{errors.api}</span>
-          <button type="button" className="btn btn-success w-100 mb-1" onClick={() => navigate('/')}>
-            <strong>Go Back</strong></button>
+          <button type="button" className="redirect-btn" onClick={() => navigate('/')}>
+            Go Back</button>
         </form>
       </div>
     </div>

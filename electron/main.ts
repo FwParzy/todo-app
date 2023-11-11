@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, screen } from 'electron'
 import path from 'node:path'
 
 // The built directory structure
@@ -19,7 +19,14 @@ let win: BrowserWindow | null
 const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
 function createWindow() {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+
+  const windowWidth = Math.round(width * 0.33);
+  const windowHeight = Math.round(height * 0.75);
   win = new BrowserWindow({
+    width: windowWidth,
+    height: windowHeight,
+    transparent: true, 
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

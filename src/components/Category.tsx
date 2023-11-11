@@ -2,12 +2,14 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { TaskType } from '../types/taskTypes';
 import TaskEdit from "./TaskEdit";
 import TaskList from "./TaskList";
-import { getCurrentTimestamp } from "../utils/timeUtils";
 import { handleEnterKey } from "../utils/keyboardUtils";
 import { CategoryType } from "../types/categoryType";
 import axios from "axios";
 import { AuthContext } from "../context/authContext";
 import { TaskCreateValidation } from "../utils/Validations";
+import "../css/category.css"
+import WaffleIcon from '../assets/WaffleIcon.png';
+
 
 interface Props {
   category: CategoryType;
@@ -22,6 +24,12 @@ const Category = ({ category, onUpdateCategory }: Props) => {
 
   function handleTaskPopup() {
     setIsTaskEditVisible(!isTaskEditVisible)
+    setErrors({
+      name: '',
+      userId: '',
+      categoryId: '',
+      api: ''
+    })
   }
 
   function handleCategoryPopup() {
@@ -146,10 +154,10 @@ const Category = ({ category, onUpdateCategory }: Props) => {
 
   return (
     category.deleteTs === null && (
-      <div>
+      <div className="category-container">
         {isTaskEditVisible &&
           <>
-            <h2> {category.name} </h2>
+            <h2 className="category-title"> {category.name} </h2>
             <TaskEdit
               inputRef={taskNameRef}
               onChange={handleInput}
@@ -164,24 +172,29 @@ const Category = ({ category, onUpdateCategory }: Props) => {
           </>
         }
         {!isTaskEditVisible && !isCategoryEditVisible &&
-          <>
-            <h2 onClick={handleTaskPopup}> {category.name} </h2>
-            <button onClick={handleCategoryPopup} > Edit </button>
-          </>
+          <div className="header-container">
+            <h2 onClick={handleTaskPopup} className="category-title"> {category.name} </h2>
+            <button onClick={handleCategoryPopup} className="category-btn">
+              <img className="edit-img" src={WaffleIcon} alt="alt"/>
+            </button>
+          </div>
         }
         {isCategoryEditVisible &&
-          <div className='category_edit' onBlur={handleBlur}>
+          <div className='category-edit'
+            onBlur={handleBlur} >
             <input
               ref={catEditRef}
               type="text"
               name="inputCategory"
               onKeyDown={(e) => handleEnterKey(e, handleOk)}
-              className='category_edit_input'
+              className='category-edit-input'
               autoFocus
             />
-            <button onClick={handleCancel}>Cancel</button>
-            <button onClick={handleOk} className='category_ok'>Ok</button>
-            <button onClick={handleDelete} className='category_delete'>Delete</button>
+            <div className="category-edit-btns">
+              <button onClick={handleDelete} className='category-edit-btn btn-del'>Delete</button>
+              <button onClick={handleCancel} className="category-edit-btn btn-cancel">Cancel</button>
+              <button onClick={handleOk} className='category-edit-btn btn-wide'>Ok</button>
+            </div>
           </div>
         }
         <TaskList

@@ -4,6 +4,7 @@ import { TaskType } from "../types/taskTypes";
 import { AuthContext } from "../context/authContext";
 import axios from "axios";
 import { TaskCatValidation, TaskCreateValidation } from "../utils/Validations";
+import "../css/task.css"
 
 interface Props {
   task: TaskType;
@@ -49,6 +50,14 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
   }, [initialTask]);
 
   function handleTaskPopup() {
+    if (editTaskVisibility) {
+      setErrors({
+        userId: '',
+        categoryId: '',
+        name: '',
+        api: ''
+      })
+    }
     setEditTaskVisibility(!editTaskVisibility)
   }
 
@@ -58,6 +67,11 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
   }
 
   const handleEditTask = async () => {
+    if (values.name === initialTask.name) {
+      handleTaskPopup();
+      return;
+    }
+
     const validationErrors = TaskCreateValidation(values);
     setErrors(validationErrors);
     if (validationErrors.name !== ''
@@ -138,10 +152,16 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
     task.deleteTs === null && (
       <div>
         {!editTaskVisibility &&
-          <>
-            <input type="checkbox" checked={!!task.completed} onChange={handleTaskClick} />
+          <div className="circle-checkbox">
+            <input
+              type="checkbox"
+              checked={!!task.completed}
+              id={`task-${task.id}`}
+              onChange={handleTaskClick}
+            />
+            <span onClick={handleTaskClick} className="clickable-area"/>
             <span onClick={handleTaskPopup}>{task.name}</span>
-          </>
+          </div>
         }
 
         {editTaskVisibility &&
@@ -154,6 +174,8 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
               onDelete={handleDeleteTask}
               currentCategory={task.categoryId}
               onCategoryChange={handleCategoryChange}
+              completed={task.completed}
+              onTaskComplete={handleTaskClick}
             />
             <span className="text-danger">{errors.name}</span>
             <span className="text-danger">{errors.userId}</span>
