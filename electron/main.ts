@@ -32,11 +32,6 @@ function registerGlobalShortcut() {
   }
 }
 
-function adjustForWindows(originalSize: number): number {
-  const newSize = originalSize + 0.2;
-  return newSize; // Adjusted size
-}
-
 function createWindow() {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
@@ -45,8 +40,8 @@ function createWindow() {
 
   // Adjust size for Windows
   if (os.platform() === 'win32') {
-    windowWidth = adjustForWindows(windowWidth);
-    windowHeight = adjustForWindows(windowHeight);
+    windowWidth = Math.round(width * 0.42);
+    windowHeight = Math.round(height * 0.90);
   }
 
   win = new BrowserWindow({
