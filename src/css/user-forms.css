@@ -1,0 +1,83 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #19242a;
+  color: #fcfcfc;
+  height: 100vh;
+}
+
+.form-box {
+  background-color: #424242;
+  color: #fcfcfc;
+  padding: 3rem;
+  border-radius: .5rem;
+  width: 85%;
+}
+
+.form-box h2 {
+  text-align: center;
+  font-weight: bold;
+  color: #fcfcfc;
+}
+
+.input-label {
+  font-weight: bold;
+  color: #fcfcfc;
+  margin-top: 1rem;
+}
+
+.text-input {
+  background-color: #343434;
+  color: #fcfcfc;
+  outline: 0;
+  border-radius: 0.25rem 0.25rem 0 0;
+  border-width: 0 0 2px;
+  border-color: #343434;
+}
+
+.text-input::placeholder {
+  opacity: 0.75;
+  color: #fcfcfc;
+}
+
+.text-input:focus {
+  background-color: #343434;
+  color: white;
+  border-color: #68bdb0;
+}
+
+.submit-btn {
+  background-color: #5aa897;
+  border-radius: .5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  color: #fcfcfc;
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.submit-btn:hover {
+  background-color: #68bdb0;
+}
+
+.redirect-btn {
+  background-color: #424242;
+  border-radius: .5rem;
+  border: none;
+  color: #68bdb0;
+  width: 100%;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+}
+
+.redirect-btn:hover {
+  background-color: #5aa897;
+  color: #fcfcfc;
+}
+
+.text-danger {
+  color: #BF1029;
+}

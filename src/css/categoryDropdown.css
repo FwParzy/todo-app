@@ -3,7 +3,7 @@
   border: 1px solid #68bdb0;
   border-radius: 0.25rem 0.25rem 0 0;
   border-width: 0 0 2px;
-  border-color: #68bdb0;
+  border-color: #343434;
   color: #fcfcfc;
   width: 100%;
   cursor: pointer;
@@ -29,6 +29,7 @@
 .dropdown-item {
   background-color: #343434;
   color: #fcfcfc;
+
   &:hover {
     background-color: #68bdb0;
     color: #fcfcfc;

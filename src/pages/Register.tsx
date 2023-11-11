@@ -1,7 +1,8 @@
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { RegistrationValidation } from "../utils/Validations"
 import axios from "axios"
+import "../css/user-forms.css"
 
 const Register = () => {
 
@@ -47,39 +48,68 @@ const Register = () => {
     }
   }
 
+  const handleLogin = () => {
+    navigate('/login')
+  }
+
   return (
-    <div className="d-flex justify-content-center align-items-center bg-primary vh-100">
-      <div className="bg-white p-3 rounded w-25">
+    <div className="container">
+      <div className="form-box">
         <h2>Register</h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="username"><strong>Username</strong></label>
-            <input type="username" placeholder="Enter Username" onChange={handleInput} name="username"
-              className="form-control rounded-0" />
+          <div>
+            <label
+              htmlFor="username"
+              className="input-label">Username</label>
+            <input
+              type="username"
+              placeholder="Enter Username"
+              onChange={handleInput}
+              name="username"
+              className="form-control text-input" />
             {errors.username && <span className="text-danger">{errors.username}</span>}
           </div>
-          <div className="mb-3">
-            <label htmlFor="email"><strong>Email</strong></label>
-            <input type="email" placeholder="Enter email" onChange={handleInput} name="email"
-              className="form-control rounded-0" />
+          <div>
+            <label
+              htmlFor="email"
+              className="input-label">Email</label>
+            <input
+              type="email"
+              placeholder="Enter email"
+              onChange={handleInput}
+              name="email"
+              className="form-control text-input" />
             {errors.email && <span className="text-danger">{errors.email}</span>}
           </div>
-          <div className="mb-3">
-            <label htmlFor="password"><strong>Password</strong> </label>
-            <input type="password" placeholder="Enter password" onChange={handleInput} name="password"
-              className="form-control rounded-0" />
+          <div>
+            <label
+              htmlFor="password"
+              className="input-label">Password </label>
+            <input
+              type="password"
+              placeholder="Enter password"
+              onChange={handleInput}
+              name="password"
+              className="form-control text-input" />
             {errors.password && <span className="text-danger">{errors.password}</span>}
           </div>
-          <div className="mb-3">
-            <label htmlFor="passwordConfirm"><strong>Confirm Password</strong> </label>
-            <input type="password" placeholder="Confirm password" onChange={handleInput} name="passwordConfirm"
-              className="form-control rounded-0" />
-            {errors.passwordConfirm && <span className="text-danger">{errors.passwordConfirm}</span>}
+          <div>
+            <label
+              htmlFor="passwordConfirm"
+              className="input-label">Confirm Password </label>
+            <input
+              type="password"
+              placeholder="Confirm password"
+              onChange={handleInput}
+              name="passwordConfirm"
+              className="form-control text-input" />
+            {errors.passwordConfirm &&
+              <span className="text-danger">{errors.passwordConfirm}</span>}
           </div>
-          <button type="submit" className="btn btn-success w-100 mb-1"><strong>Sign up</strong></button>
+          <button type="submit" className="submit-btn">Sign up</button>
           <span className="text-danger">{errors.api}</span>
-          <Link to="/login"
-            className="btn btn-default border w-100 bg-light">Log in</Link>
+          <button type="button" className="redirect-btn"
+            onClick={handleLogin}>Log in</button>
         </form>
       </div>
     </div>

@@ -14,7 +14,6 @@
   color: #fcfcfc;
   border-radius: .5rem;
 
-
   .user-btns {
     align-items: right;
     background-color: #424242;
@@ -23,10 +22,12 @@
     border: none;
     color: #68bdb0;
   }
+
   .user-btns:hover {
     background-color: #5aa897;
     color: #fcfcfc;
   }
+
   .user-btns.active {
     background-color: #5aa897;
     color: #fcfcfc;
@@ -37,6 +38,7 @@
   display: flex;
   flex-direction: column;
 }
+
 .add-category {
   background-color: #424242;
   color: #fcfcfc;
@@ -54,9 +56,11 @@
     padding-right: 2rem;
     margin-right: .5rem;
   }
+
   .app-input:focus {
     border-color: green;
   }
+
   .app-input-btn {
     align-items: right;
     background-color: #424242;
@@ -66,10 +70,9 @@
     border: none;
     color: #68bdb0;
   }
+
   .app-input-btn:hover {
     background-color: #5aa897;
     color: #fcfcfc;
   }
-
 }
-

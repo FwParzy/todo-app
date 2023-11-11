@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { LoginValidation } from "../utils/Validations";
 import { AuthContext } from '../context/authContext';
 import axios from "axios";
-import "../css/login.css"
+import "../css/user-forms.css"
 
 const Login = () => {
   const navigate = useNavigate();
@@ -42,27 +42,33 @@ const Login = () => {
     }
   }
 
-return (
-    <div className="login-container">
-      <div className="login-box">
+  const handleRegister = () => {
+    navigate('/register')
+  }
+
+  return (
+    <div className="container">
+      <div className="form-box">
         <h2>Log In</h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="username" className="login-label">Username</label>
+          <div>
+            <label htmlFor="username" className="input-label">Username</label>
             <input type="text" placeholder="Enter username" onChange={handleInput} name="username"
-              className="form-control login-input" />
+              className="form-control text-input" />
             {errors.username && <span className="text-danger">{errors.username}</span>}
           </div>
-          <div className="mb-3">
-            <label htmlFor="password" className="login-label">Password</label>
+          <div>
+            <label htmlFor="password" className="input-label">Password</label>
             <input type="password" placeholder="Enter password" onChange={handleInput} name="password"
-              className="form-control login-input" />
+              className="form-control text-input" />
             {errors.password && <span className="text-danger">{errors.password}</span>}
           </div>
-          <button type="submit" className="login-button"><strong>Log in</strong></button>
+          <button type="submit" className="submit-btn"><strong>Log in</strong></button>
           <span className="text-danger">{errors.api}</span>
-          <button type="button"  className="login-register-btn">
-            <Link to="/register" className="login-register-link">Register</Link>
+          <button
+            type="button"
+            onClick={handleRegister}
+            className="redirect-btn">Register
           </button>
         </form>
       </div>

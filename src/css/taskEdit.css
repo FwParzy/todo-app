@@ -12,7 +12,7 @@
     color: #fcfcfc;
     outline: none;
     border-width: 0 0 2px;
-    border-color: #68bdb0;
+    border-color: #343434;
     padding: 0.5rem;
     width: 100%;
     margin-bottom: 0.5rem;
@@ -103,20 +103,21 @@
     }
 
   }
-    .task-del {
-      margin-right: auto;
 
-      &:hover {
-        background-color: #BF1029;
-      }
+  .task-del {
+    margin-right: auto;
+
+    &:hover {
+      background-color: #BF1029;
     }
+  }
 
-    .task-cancel:hover {
-        background-color:  #FFF49B;
-        color: black;
-      }
+  .task-cancel:hover {
+    background-color:  #FFF49B;
+    color: black;
+  }
 
-    .task-ok {
-      padding: 0 1rem 0 1rem;
-    }
+  .task-ok {
+    padding: 0 1rem 0 1rem;
+  }
 }
