@@ -10,7 +10,6 @@ import { TaskCreateValidation } from "../utils/Validations";
 import "../css/category.css"
 import WaffleIcon from '../assets/WaffleIcon.png';
 
-
 interface Props {
   category: CategoryType;
   onUpdateCategory: () => void;

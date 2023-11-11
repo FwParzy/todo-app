@@ -5,7 +5,6 @@ import { AuthContext } from "../context/authContext";
 import Dropdown from 'react-bootstrap/Dropdown';
 import "../css/categoryDropdown.css"
 
-
 interface Props {
   currentCategory: number;
   onCategoryChange: (categoryId: number) => void;
@@ -57,8 +56,7 @@ export const CategoryDropdown = ({ currentCategory, onCategoryChange }: Props) =
             <Dropdown.Item
               key={category.id}
               className="dropdown-item"
-              onClick={() => handleChange(category.id)}
-            >
+              onClick={() => handleChange(category.id)} >
               {category.name}
             </Dropdown.Item>
           ))}

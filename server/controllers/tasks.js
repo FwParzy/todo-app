@@ -26,7 +26,7 @@ export const create = (req, res) => {
   });
 };
 
-export const get = (req, res) => {
+export const getTasks = (req, res) => {
   const userId = req.params.userId;
   const catId = req.params.categoryId;
 
@@ -37,6 +37,21 @@ export const get = (req, res) => {
   `;
 
   db.query(query, [userId, catId], (err, data) => {
+    if (err) return res.status(500).json({ message: 'Server error: Fetching tasks' });
+    return res.status(200).json(data);
+  });
+};
+
+export const getAllTasks = (req, res) => {
+  const userId = req.params.userId;
+
+  const query = `
+    SELECT * FROM tasks
+    WHERE userId = ?
+      AND deleteTs IS NULL
+  `;
+
+  db.query(query, [userId], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server error: Fetching tasks' });
     return res.status(200).json(data);
   });

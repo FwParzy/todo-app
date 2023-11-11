@@ -25,7 +25,7 @@ export const create = (req, res) => {
   });
 };
 
-export const get = (req, res) => {
+export const getCats = (req, res) => {
   const userId = req.params.userId;
 
   const query = `

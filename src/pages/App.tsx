@@ -102,12 +102,56 @@ function App() {
     }
   }
 
+  const handleDownloadMd = async () => {
+    if (!currentUser?.id) return;
+
+    console.log('downloading')
+    try {
+      const catUrl = `http://localhost:8081/api/cat/${currentUser.id}`
+      const taskUrl = `http://localhost:8081/api/task/all-${currentUser.id}`
+
+      const categoriesResponse = await axios.get(catUrl);
+      const tasksResponse = await axios.get(taskUrl);
+
+      const categoriesData = categoriesResponse.data;
+      const tasksData = tasksResponse.data;
+
+      const response = await axios.post('http://localhost:8081/api/export/md',
+        { categories: categoriesData, tasks: tasksData }, {
+        responseType: 'blob'
+      });
+
+      const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+      const fileLink = document.createElement('a');
+      fileLink.href = fileURL;
+      fileLink.setAttribute('download', 'notes.md');
+      document.body.appendChild(fileLink);
+      fileLink.click();
+      fileLink.parentNode.removeChild(fileLink);
+      window.URL.revokeObjectURL(fileURL);
+
+    } catch (err) {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        api: err.response?.data.message || 'Error downloading file'
+      }));
+    }
+  };
+
   return (
     <div className='app-container'>
       <div className='user'>
         <button type="button"
           className={`user-btns ${newCategoryVisibility ? 'active' : ''}`}
           onClick={toggleNewCatVisibility} >Add a Category</button>
+        <button type="button" className='user-btns' onClick={handleDownloadMd}>
+          Download as Md
+        </button>
+        {currentUser && <button
+          type="button"
+          className='user-btns'
+          onClick={() => navigate('/editUser')}
+        >Edit {currentUser.username}</button>}
         <button type="button"
           className='user-btns'
           onClick={() => {
@@ -115,13 +159,7 @@ function App() {
             navigate('/login');
           }}
         >Logout</button>
-        {currentUser && <button
-          type="button"
-          className='user-btns'
-          onClick={() => navigate('/editUser')}
-        >Edit {currentUser.username}</button>}
       </div>
-
       <span className="text-danger">{errors.api}</span>
       <div className='cat-list'>
         <CategoryList
@@ -129,21 +167,20 @@ function App() {
           onUpdateCategory={fetchCategories}
         />
         {newCategoryVisibility &&
-        <div className='add-category'>
-          <input
-            className='app-input'
-            ref={categoryNameRef}
-            type="text"
-            name="name"
-            placeholder="Enter Category"
-            onChange={handleInput}
-            onKeyDown={(e) => handleEnterKey(e, handleAddCategory )}
-            autoFocus
-          />
-          <button className='app-input-btn' onClick={handleAddCategory}>Add Category</button>
-        </div>
+          <div className='add-category'>
+            <input
+              className='app-input'
+              ref={categoryNameRef}
+              type="text"
+              name="name"
+              placeholder="Enter Category"
+              onChange={handleInput}
+              onKeyDown={(e) => handleEnterKey(e, handleAddCategory)}
+              autoFocus
+            />
+            <button className='app-input-btn' onClick={handleAddCategory}>Add Category</button>
+          </div>
         }
-
       </div>
       <span className="text-danger">{errors.name}</span>
       <span className="text-danger">{errors.userId}</span>
