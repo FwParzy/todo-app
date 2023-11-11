@@ -1,6 +1,7 @@
 import express from 'express';
 import {
-  get,
+  getTasks,
+  getAllTasks,
   create,
   deleteOne,
   completeOne,
@@ -13,7 +14,8 @@ import {
 const router = express.Router();
 
 router.post('/create', create);
-router.get('/:userId&:categoryId', get);
+router.get('/:userId&:categoryId', getTasks);
+router.get('/all-:userId', getAllTasks);
 router.post('/deleteOne', deleteOne);
 router.post('/updateName', updateName);
 router.post('/complete', completeOne);

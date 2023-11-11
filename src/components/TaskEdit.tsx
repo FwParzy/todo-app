@@ -1,7 +1,7 @@
 import { handleEnterKey } from '../utils/keyboardUtils';
+import { useEffect, useRef } from 'react';
 import { CategoryDropdown } from './CategoryDropdown';
 import "../css/taskEdit.css"
-import { useEffect, useRef } from 'react';
 
 interface Props {
   inputRef: React.RefObject<HTMLInputElement>;

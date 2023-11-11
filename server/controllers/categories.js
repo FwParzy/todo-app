@@ -25,7 +25,8 @@ export const create = (req, res) => {
   });
 };
 
-export const get = (req, res) => {
+export const getCats = (req, res) => {
+  console.log('cat' + req.params)
   const userId = req.params.userId;
 
   const query = `
