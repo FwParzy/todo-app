@@ -1,5 +1,6 @@
 import { app, BrowserWindow, globalShortcut, screen } from 'electron'
 import path from 'node:path'
+import os from 'os';
 
 // The built directory structure
 //
@@ -20,7 +21,6 @@ const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
 function registerGlobalShortcut() {
   const ret = globalShortcut.register('CommandOrControl+Shift+Alt+I', () => {
-    console.log('Global shortcut activated');
     if (win) {
       if (win.isMinimized()) win.restore();
       win.focus();
@@ -32,11 +32,23 @@ function registerGlobalShortcut() {
   }
 }
 
+function adjustForWindows(originalSize: number): number {
+  const newSize = originalSize + 0.2;
+  return newSize; // Adjusted size
+}
+
 function createWindow() {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
-  const windowWidth = Math.round(width * 0.33);
-  const windowHeight = Math.round(height * 0.75);
+  let windowWidth = Math.round(width * 0.33);
+  let windowHeight = Math.round(height * 0.75);
+
+  // Adjust size for Windows
+  if (os.platform() === 'win32') {
+    windowWidth = adjustForWindows(windowWidth);
+    windowHeight = adjustForWindows(windowHeight);
+  }
+
   win = new BrowserWindow({
     width: windowWidth,
     height: windowHeight,

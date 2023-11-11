@@ -1,3 +1,14 @@
 #root {
   background-color: #19242a;
 }
+/* Hide scrollbar but allow scrolling */
+body {
+  overflow: auto;
+  scrollbar-width: none; /* For Firefox */
+}
+
+/* For Chrome, Safari, and Opera */
+body::-webkit-scrollbar {
+  display: none;
+}
+
