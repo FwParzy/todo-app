@@ -41,9 +41,10 @@ const Register = () => {
       await axios.post('http://localhost:8081/api/auth/register', values);
       navigate('/login');
     } catch (err) {
+      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: err.response.data.message
+        api: response 
       }));
     }
   }

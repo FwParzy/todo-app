@@ -81,9 +81,10 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
     try {
       await axios.post('http://localhost:8081/api/task/updateName', values);
     } catch (err) {
+      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: err.response.data.message
+        api: response 
       }));
     }
     onUpdateTask();
@@ -99,9 +100,10 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
     try {
       await axios.post('http://localhost:8081/api/task/deleteOne', values);
     } catch (err) {
+      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: err.response.data.message
+        api: response 
       }));
     }
     onUpdateTask();
@@ -112,9 +114,10 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
     try {
       await axios.post('http://localhost:8081/api/task/complete', values);
     } catch (err) {
+      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: err.response.data.message
+        api: response 
       }));
     }
     onUpdateTask();
@@ -138,9 +141,10 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
     try {
       await axios.post('http://localhost:8081/api/task/changeCat', values);
     } catch (err) {
+      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: err.response.data.message
+        api: response 
       }));
     }
     onUpdateCategory()

@@ -26,9 +26,10 @@ export const CategoryDropdown = ({ currentCategory, onCategoryChange }: Props) =
             setCategories(response.data);
           })
           .catch(err => {
+            const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
             setErrors(prevErrors => ({
               ...prevErrors,
-              api: err.response.data.message
+              api: response 
             }));
           });
       }
