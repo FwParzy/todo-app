@@ -11,7 +11,6 @@ export default defineConfig({
     tsconfigPaths(),
     electron({
       main: {
-        // Shortcut of `build.lib.entry`.
         entry: 'electron/main.ts',
         vite: {
           build: {

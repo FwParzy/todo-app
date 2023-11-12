@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@electron/rebuild": "^3.3.0",
     "@popperjs/core": "^2.11.8",
     "axios": "^1.5.1",
     "bootstrap": "^5.3.2",

@@ -1,5 +1,5 @@
-import { app, BrowserWindow, globalShortcut, screen } from 'electron'
-import { initDatabase } from '../server/db.js';
+import { app, BrowserWindow, globalShortcut, ipcMain, screen } from 'electron'
+import { initDatabase, executeQuery } from '../server/db.js';
 import path from 'node:path'
 import os from 'os';
 
@@ -87,11 +87,25 @@ app.on('activate', () => {
 })
 
 app.whenReady().then(() => {
-  initDatabase();
   createWindow();
+  initDatabase();
   registerGlobalShortcut(); // Register the shortcut after the app is ready
 });
 
 app.on('will-quit', () => {
   globalShortcut.unregisterAll();
+});
+
+ipcMain.handle('db-query', async (_event, sqlQuery) => {
+  return new Promise((resolve) => {
+    // Execute the SQL query and return the results to the renderer process
+    executeQuery(sqlQuery, [], (err, rows) => {
+      if (err) {
+        console.error('Error executing SQL query:', err);
+        resolve([]);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
 });

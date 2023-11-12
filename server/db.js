@@ -1,4 +1,3 @@
-import mysql from 'mysql';
 import sqlite3 from 'sqlite3';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -9,9 +8,11 @@ dotenv.config();
 
 let db;
 let initDatabase; // Declare initDatabase outside
-const isSQLite = process.env.USE_SQLITE;
+const isSQLite = process.env.USE_SQLITE === 'true';
 
-if (isSQLite === 'true') {
+const isMainProcess = process && process.type === 'browser';
+
+if (isSQLite) {
   // SQLite configuration
   const dbPath = path.join(app.getPath('userData'), 'todo.db');
   db = new sqlite3.Database(dbPath, (err) => {
@@ -24,46 +25,50 @@ if (isSQLite === 'true') {
   initDatabase = () => {
     db.serialize(() => {
       db.run(`CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL,
-        email TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL,
-        createTs TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        cancelTs TIMESTAMP NULL
-      )`);
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+username TEXT NOT NULL,
+email TEXT NOT NULL UNIQUE,
+password TEXT NOT NULL,
+createTs TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+cancelTs TIMESTAMP NULL
+)`);
 
       db.run(`CREATE TABLE IF NOT EXISTS categories (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        userId INTEGER NOT NULL,
-        name TEXT NOT NULL,
-        createTs TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        cancelTs TIMESTAMP NULL,
-        deleteTs TIMESTAMP NULL,
-        FOREIGN KEY (userId) REFERENCES users(id)
-      )`);
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+userId INTEGER NOT NULL,
+name TEXT NOT NULL,
+createTs TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+cancelTs TIMESTAMP NULL,
+deleteTs TIMESTAMP NULL,
+FOREIGN KEY (userId) REFERENCES users(id)
+)`);
 
       db.run(`CREATE TABLE IF NOT EXISTS tasks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        userId INTEGER NOT NULL,
-        categoryId INTEGER NOT NULL,
-        name TEXT NOT NULL,
-        completed BOOLEAN NOT NULL DEFAULT 0,
-        createTs TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        cancelTs TIMESTAMP NULL,
-        deleteTs TIMESTAMP NULL,
-        FOREIGN KEY (categoryId) REFERENCES categories(id),
-        FOREIGN KEY (userId) REFERENCES users(id)
-      )`);
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+userId INTEGER NOT NULL,
+categoryId INTEGER NOT NULL,
+name TEXT NOT NULL,
+completed BOOLEAN NOT NULL DEFAULT 0,
+createTs TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+cancelTs TIMESTAMP NULL,
+deleteTs TIMESTAMP NULL,
+FOREIGN KEY (categoryId) REFERENCES categories(id),
+FOREIGN KEY (userId) REFERENCES users(id)
+)`);
     });
   };
 } else {
+  let mysql;
+  if (isMainProcess) {
+    mysql = require('mysql');
+  }
   // MySQL configuration
-  db = mysql.createConnection({
+  db = isMainProcess ? mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     database: process.env.DB_NAME,
     password: process.env.DB_PASS
-  });
+  }) : null;
 
   initDatabase = () => {
   };
