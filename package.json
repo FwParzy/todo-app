@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"vite\"",
+    "dev": "vite",
+    "devserv": "concurrently \"npm run server\" \"vite\"",
     "server": "cd ./server && npm start",
     "build": "tsc && vite build && electron-builder",
     "lint": "eslint --ext .ts .",
@@ -13,7 +14,6 @@
     "@popperjs/core": "^2.11.8",
     "axios": "^1.5.1",
     "bootstrap": "^5.3.2",
-    "dotenv": "^16.3.1",
     "moment": "^2.29.4",
     "os": "^0.1.2",
     "prettier": "^3.0.3",
