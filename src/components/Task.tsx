@@ -84,7 +84,7 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
       const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: response 
+        api: response
       }));
     }
     onUpdateTask();
@@ -103,7 +103,7 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
       const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: response 
+        api: response
       }));
     }
     onUpdateTask();
@@ -117,7 +117,7 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
       const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: response 
+        api: response
       }));
     }
     onUpdateTask();
@@ -144,7 +144,7 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
       const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: response 
+        api: response
       }));
     }
     onUpdateCategory()
@@ -163,7 +163,7 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
               id={`task-${task.id}`}
               onChange={handleTaskClick}
             />
-            <span onClick={handleTaskClick} className="clickable-area"/>
+            <span onClick={handleTaskClick} className="clickable-area" />
             <span onClick={handleTaskPopup}>{task.name}</span>
           </div>
         }

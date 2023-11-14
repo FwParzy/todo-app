@@ -45,7 +45,7 @@ function App() {
         const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
         setErrors(prevErrors => ({
           ...prevErrors,
-          api: response 
+          api: response
         }));
       });
   }
@@ -63,7 +63,7 @@ function App() {
         const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
         setErrors(prevErrors => ({
           ...prevErrors,
-          api: response 
+          api: response
         }));
       }
     };
@@ -100,7 +100,7 @@ function App() {
       const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: response 
+        api: response
       }));
     }
   }
@@ -137,7 +137,7 @@ function App() {
       const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: response 
+        api: response
       }));
     }
   };

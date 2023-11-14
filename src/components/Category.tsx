@@ -48,7 +48,7 @@ const Category = ({ category, onUpdateCategory }: Props) => {
           const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
           setErrors(prevErrors => ({
             ...prevErrors,
-            api: response 
+            api: response
           }));
         });
     }
@@ -90,7 +90,7 @@ const Category = ({ category, onUpdateCategory }: Props) => {
       const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: response 
+        api: response
       }));
     }
   }
@@ -118,7 +118,7 @@ const Category = ({ category, onUpdateCategory }: Props) => {
       const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: response 
+        api: response
       }));
     }
     onUpdateCategory();
@@ -141,7 +141,7 @@ const Category = ({ category, onUpdateCategory }: Props) => {
       const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: response 
+        api: response
       }));
     }
     onUpdateCategory();
@@ -178,7 +178,7 @@ const Category = ({ category, onUpdateCategory }: Props) => {
           <div className="header-container">
             <h2 onClick={handleTaskPopup} className="category-title"> {category.name} </h2>
             <button onClick={handleCategoryPopup} className="category-btn">
-              <img className="edit-img" src={WaffleIcon} alt="alt"/>
+              <img className="edit-img" src={WaffleIcon} alt="alt" />
             </button>
           </div>
         }
