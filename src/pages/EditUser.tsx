@@ -67,9 +67,10 @@ const EditUser = () => {
       await editUser(values)
       navigate('/');
     } catch (err) {
+      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: err.response.data.message
+        api: response
       }));
     }
   }

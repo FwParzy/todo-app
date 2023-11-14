@@ -45,9 +45,10 @@ const Category = ({ category, onUpdateCategory }: Props) => {
           setTasks(response.data);
         })
         .catch(err => {
+          const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
           setErrors(prevErrors => ({
             ...prevErrors,
-            api: err.response.data.message
+            api: response
           }));
         });
     }
@@ -86,9 +87,10 @@ const Category = ({ category, onUpdateCategory }: Props) => {
       fetchTasks();
       taskNameRef.current.value = ''
     } catch (err) {
+      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: err.response.data.message
+        api: response
       }));
     }
   }
@@ -113,9 +115,10 @@ const Category = ({ category, onUpdateCategory }: Props) => {
     try {
       await axios.post('http://localhost:8081/api/cat/updateName', values);
     } catch (err) {
+      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: err.response.data.message
+        api: response
       }));
     }
     onUpdateCategory();
@@ -135,9 +138,10 @@ const Category = ({ category, onUpdateCategory }: Props) => {
       await axios.post('http://localhost:8081/api/cat/delete', values);
       await axios.post('http://localhost:8081/api/task/deleteCat', values);
     } catch (err) {
+      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: err.response.data.message
+        api: response
       }));
     }
     onUpdateCategory();
@@ -174,7 +178,7 @@ const Category = ({ category, onUpdateCategory }: Props) => {
           <div className="header-container">
             <h2 onClick={handleTaskPopup} className="category-title"> {category.name} </h2>
             <button onClick={handleCategoryPopup} className="category-btn">
-              <img className="edit-img" src={WaffleIcon} alt="alt"/>
+              <img className="edit-img" src={WaffleIcon} alt="alt" />
             </button>
           </div>
         }

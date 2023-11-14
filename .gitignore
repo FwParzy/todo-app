@@ -1,3 +1,5 @@
 /dist/
 /dist-electron/
+/release/
 .env
+*.crt

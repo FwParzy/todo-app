@@ -42,9 +42,10 @@ function App() {
         setCategories(response.data);
       })
       .catch(err => {
+        const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
         setErrors(prevErrors => ({
           ...prevErrors,
-          api: err.response.data.message
+          api: response
         }));
       });
   }
@@ -59,9 +60,10 @@ function App() {
       try {
         await axios.post('http://localhost:8081/api/task/deleteOld', values);
       } catch (err) {
+        const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
         setErrors(prevErrors => ({
           ...prevErrors,
-          api: err.response.data.message
+          api: response
         }));
       }
     };
@@ -95,9 +97,10 @@ function App() {
       fetchCategories();
       categoryNameRef.current.value = ''
     } catch (err) {
+      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: err.response.data.message
+        api: response
       }));
     }
   }
@@ -131,9 +134,10 @@ function App() {
       window.URL.revokeObjectURL(fileURL);
 
     } catch (err) {
+      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
-        api: err.response?.data.message || 'Error downloading file'
+        api: response
       }));
     }
   };

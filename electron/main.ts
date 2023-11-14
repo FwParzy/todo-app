@@ -2,18 +2,8 @@ import { app, BrowserWindow, globalShortcut, screen } from 'electron'
 import path from 'node:path'
 import os from 'os';
 
-// The built directory structure
-//
-// ├─┬─┬ dist
-// │ │ └── index.html
-// │ │
-// │ ├─┬ dist-electron
-// │ │ ├── main.js
-// │ │ └── preload.js
-// │
 process.env.DIST = path.join(__dirname, '../dist')
 process.env.VITE_PUBLIC = app.isPackaged ? process.env.DIST : path.join(process.env.DIST, '../public')
-
 
 let win: BrowserWindow | null
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
@@ -47,7 +37,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: windowWidth,
     height: windowHeight,
-    transparent: true, 
+    transparent: true,
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

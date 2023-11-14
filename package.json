@@ -4,6 +4,8 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "devserv": "concurrently \"npm run server\" \"vite\"",
+    "server": "cd ./server && npm start",
     "build": "tsc && vite build && electron-builder",
     "lint": "eslint --ext .ts .",
     "preview": "vite preview"
@@ -12,7 +14,6 @@
     "@popperjs/core": "^2.11.8",
     "axios": "^1.5.1",
     "bootstrap": "^5.3.2",
-    "dotenv": "^16.3.1",
     "moment": "^2.29.4",
     "os": "^0.1.2",
     "prettier": "^3.0.3",
@@ -31,6 +32,7 @@
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
     "@vitejs/plugin-react": "^4.0.4",
+    "concurrently": "^8.2.2",
     "electron": "^26.1.0",
     "electron-builder": "^24.6.4",
     "eslint": "^8.50.0",
