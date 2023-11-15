@@ -45,7 +45,6 @@ function createWindow() {
     windowHeight = Math.round(height * 0.80);
   }
 
-
   win = new BrowserWindow({
     width: windowWidth,
     height: windowHeight,
