@@ -4,4 +4,3 @@
 /server/node_modules/
 /release/
 .env
-*.crt
