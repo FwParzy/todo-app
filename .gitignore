@@ -1,5 +1,7 @@
 /dist/
 /dist-electron/
+/node_modules/
+/server/node_modules/
 /release/
 .env
 *.crt

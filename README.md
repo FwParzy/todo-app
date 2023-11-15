@@ -42,3 +42,6 @@ Here you can delete or rename categories. If you want to move your todo list to 
 Lastly if your user is wrong or you want to change the password, click the `Edit ${user.username}` button.
 This takes you to a page where you can edit your own user.  
 Thanks for using my app!!
+
+
+ADD GLOBAL SHORTCUT TO README
