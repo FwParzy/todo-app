@@ -1,7 +1,9 @@
 {
-  "name": "todo-vite",
+  "name": "STuff-Todo",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Personal Project",
+  "author": "FwParzy on github",
   "scripts": {
     "dev": "vite",
     "devserv": "concurrently \"npm run server\" \"vite\"",
@@ -31,6 +33,7 @@
     "@typescript-eslint/parser": "^6.11.0",
     "@vitejs/plugin-react": "^4.0.4",
     "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "electron": "^26.1.0",
     "electron-builder": "^24.6.4",
     "eslint": "^8.50.0",

@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginValidation } from "../utils/Validations";
 import { AuthContext } from '../context/authContext';
-import axios from "axios";
 import "../css/user-forms.css"
 import axiosInstance from "../context/axiosContext";
 

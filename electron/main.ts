@@ -48,7 +48,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: windowWidth,
     height: windowHeight,
-    icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+    icon: path.join(process.env.VITE_PUBLIC, 'Stuff-Todo.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -87,7 +87,7 @@ app.on('activate', () => {
 
 app.whenReady().then(() => {
   createWindow();
-  registerGlobalShortcut(); // Register the shortcut after the app is ready
+  registerGlobalShortcut(win); // Register the shortcut after the app is ready
 });
 
 app.on('will-quit', () => {
