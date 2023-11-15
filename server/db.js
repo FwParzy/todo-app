@@ -27,7 +27,6 @@ if (process.env.NODE_ENV === 'prod') {
     }
   };
 }
-console.log(dbConfig)
 
 export const db = mysql.createConnection(dbConfig);
 db.connect((err) => {

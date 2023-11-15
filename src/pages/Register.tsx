@@ -52,16 +52,10 @@ const Register = () => {
     for (const category of tutorialCategories) {
       try {
         const res = await axiosInstance.post('/api/cat/create', { name: category.name, userId });
-        console.log(res.data)
         const categoryId = res.data.categoryId;
 
         // Create tasks for this category
         for (const taskName of category.tasks) {
-          console.log({
-            name: taskName,
-            userId,
-            categoryId
-          })
           await axiosInstance.post('/api/task/create', {
             name: taskName,
             userId,

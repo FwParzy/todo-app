@@ -164,7 +164,7 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
               onChange={handleTaskClick}
             />
             <span onClick={handleTaskClick} className="clickable-area" />
-            <span onClick={handleTaskPopup}>{task.name}</span>
+            <span onClick={handleTaskPopup} className="task-text">{task.name}</span>
           </div>
         }
 

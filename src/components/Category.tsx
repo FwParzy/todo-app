@@ -176,7 +176,7 @@ const Category = ({ category, onUpdateCategory }: Props) => {
         }
         {!isTaskEditVisible && !isCategoryEditVisible &&
           <div className="header-container">
-            <h2 onClick={handleTaskPopup} className="category-title"> {category.name} </h2>
+            <h2 className="category-title" onClick={handleTaskPopup} > {category.name} </h2>
             <button onClick={handleCategoryPopup} className="category-btn">
               <img className="edit-img" src={WaffleIcon} alt="alt" />
             </button>

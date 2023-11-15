@@ -10,6 +10,7 @@
 
 .user {
   margin-left: auto;
+  margin-bottom: 2rem;
   background-color: #424242;
   color: #fcfcfc;
   border-radius: .5rem;
@@ -52,13 +53,13 @@
     color: #fcfcfc;
     outline: 0;
     border-width: 0 0 2px;
-    border-color: #68bdb0;
+    border-color: #343434;
     padding-right: 2rem;
     margin-right: .5rem;
   }
 
   .app-input:focus {
-    border-color: green;
+    border-color: #68bdb0;
   }
 
   .app-input-btn {
