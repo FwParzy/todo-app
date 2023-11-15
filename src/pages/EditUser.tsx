@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom"
 import { useContext, useEffect, useRef, useState } from "react"
 import { EditUserValidation } from "../utils/Validations"
-import axios from "axios"
 import { AuthContext } from "../context/authContext"
 import "../css/user-forms.css"
+import axiosInstance from "../context/axiosContext"
 
 const EditUser = () => {
   const { currentUser, editUser } = useContext(AuthContext);
@@ -63,11 +63,11 @@ const EditUser = () => {
       && values.password === '')
       return validationErrors.api = 'Nothing to update'
     try {
-      await axios.post('http://localhost:8081/api/auth/editUser', values);
+      await axiosInstance.post('/api/auth/editUser', values);
       await editUser(values)
       navigate('/');
     } catch (err) {
-      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+      const response = err.response ? err.response.data.message : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
         api: response

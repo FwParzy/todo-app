@@ -4,11 +4,11 @@ import TaskEdit from "./TaskEdit";
 import TaskList from "./TaskList";
 import { handleEnterKey } from "../utils/keyboardUtils";
 import { CategoryType } from "../types/categoryType";
-import axios from "axios";
 import { AuthContext } from "../context/authContext";
 import { TaskCreateValidation } from "../utils/Validations";
 import "../css/category.css"
 import WaffleIcon from '../assets/WaffleIcon.png';
+import axiosInstance from "../context/axiosContext";
 
 interface Props {
   category: CategoryType;
@@ -40,12 +40,12 @@ const Category = ({ category, onUpdateCategory }: Props) => {
 
   const fetchTasks = () => {
     if (currentUser) {
-      axios.get(`http://localhost:8081/api/task/${currentUser.id}&${category.id}`)
+      axiosInstance.get(`/api/task/${currentUser.id}&${category.id}`)
         .then(response => {
           setTasks(response.data);
         })
         .catch(err => {
-          const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+          const response = err.response ? err.response.data.message : 'Cannot connect to the server'
           setErrors(prevErrors => ({
             ...prevErrors,
             api: response
@@ -83,11 +83,11 @@ const Category = ({ category, onUpdateCategory }: Props) => {
       || validationErrors.categoryId !== '') return;
 
     try {
-      await axios.post('http://localhost:8081/api/task/create', values);
+      await axiosInstance.post('/api/task/create', values);
       fetchTasks();
       taskNameRef.current.value = ''
     } catch (err) {
-      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+      const response = err.response ? err.response.data.message : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
         api: response
@@ -113,9 +113,9 @@ const Category = ({ category, onUpdateCategory }: Props) => {
     if (!values.name) return;
 
     try {
-      await axios.post('http://localhost:8081/api/cat/updateName', values);
+      await axiosInstance.post('/api/cat/updateName', values);
     } catch (err) {
-      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+      const response = err.response ? err.response.data.message : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
         api: response
@@ -135,10 +135,10 @@ const Category = ({ category, onUpdateCategory }: Props) => {
       id: category.id
     }
     try {
-      await axios.post('http://localhost:8081/api/cat/delete', values);
-      await axios.post('http://localhost:8081/api/task/deleteCat', values);
+      await axiosInstance.post('/api/cat/delete', values);
+      await axiosInstance.post('/api/task/deleteCat', values);
     } catch (err) {
-      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+      const response = err.response ? err.response.data.message : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
         api: response
@@ -176,7 +176,7 @@ const Category = ({ category, onUpdateCategory }: Props) => {
         }
         {!isTaskEditVisible && !isCategoryEditVisible &&
           <div className="header-container">
-            <h2 onClick={handleTaskPopup} className="category-title"> {category.name} </h2>
+            <h2 className="category-title" onClick={handleTaskPopup} > {category.name} </h2>
             <button onClick={handleCategoryPopup} className="category-btn">
               <img className="edit-img" src={WaffleIcon} alt="alt" />
             </button>

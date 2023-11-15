@@ -1,11 +1,13 @@
 {
-  "name": "todo-vite",
+  "name": "STuff-Todo",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Personal Project",
+  "author": "FwParzy on github",
   "scripts": {
     "dev": "vite",
     "devserv": "concurrently \"npm run server\" \"vite\"",
-    "server": "cd ./server && npm start",
+    "server": "cd ./server && npm start dev",
     "build": "tsc && vite build && electron-builder",
     "lint": "eslint --ext .ts .",
     "preview": "vite preview"
@@ -21,18 +23,17 @@
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.17.0",
-    "uuid": "^9.0.1",
     "vite-tsconfig-paths": "^4.2.1"
   },
   "devDependencies": {
     "@types/node": "^20.8.7",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
-    "@types/uuid": "^9.0.4",
-    "@typescript-eslint/eslint-plugin": "^6.7.4",
-    "@typescript-eslint/parser": "^6.7.4",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
     "@vitejs/plugin-react": "^4.0.4",
     "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "electron": "^26.1.0",
     "electron-builder": "^24.6.4",
     "eslint": "^8.50.0",

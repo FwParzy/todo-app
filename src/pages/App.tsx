@@ -4,10 +4,9 @@ import CategoryList from '../components/CategoryList';
 import { CategoryType } from '../types/categoryType';
 import { AuthContext } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { CategoryCreateValidation } from '../utils/Validations';
 import "../css/app.css"
-// Remove unusedPackages uuid
+import axiosInstance from '../context/axiosContext';
 
 function App() {
 
@@ -37,12 +36,12 @@ function App() {
 
   const fetchCategories = () => {
     if (!currentUser) return
-    axios.get(`http://localhost:8081/api/cat/${currentUser.id}`)
+    axiosInstance.get(`/api/cat/${currentUser.id}`)
       .then(response => {
         setCategories(response.data);
       })
       .catch(err => {
-        const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+        const response = err.response ? err.response.data.message : 'Cannot connect to the server'
         setErrors(prevErrors => ({
           ...prevErrors,
           api: response
@@ -58,9 +57,9 @@ function App() {
   useEffect(() => {
     const updateTasks = async () => {
       try {
-        await axios.post('http://localhost:8081/api/task/deleteOld', values);
+        await axiosInstance.post('/api/task/deleteOld', values);
       } catch (err) {
-        const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+        const response = err.response ? err.response.data.message : 'Cannot connect to the server'
         setErrors(prevErrors => ({
           ...prevErrors,
           api: response
@@ -93,11 +92,11 @@ function App() {
     if (validationErrors.name !== '' || validationErrors.userId !== '') return;
 
     try {
-      await axios.post('http://localhost:8081/api/cat/create', values);
+      await axiosInstance.post('/api/cat/create', values);
       fetchCategories();
       categoryNameRef.current.value = ''
     } catch (err) {
-      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+      const response = err.response ? err.response.data.message : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
         api: response
@@ -110,16 +109,16 @@ function App() {
 
     console.log('downloading')
     try {
-      const catUrl = `http://localhost:8081/api/cat/${currentUser.id}`
-      const taskUrl = `http://localhost:8081/api/task/all-${currentUser.id}`
+      const catUrl = `/api/cat/${currentUser.id}`
+      const taskUrl = `/api/task/all-${currentUser.id}`
 
-      const categoriesResponse = await axios.get(catUrl);
-      const tasksResponse = await axios.get(taskUrl);
+      const categoriesResponse = await axiosInstance.get(catUrl);
+      const tasksResponse = await axiosInstance.get(taskUrl);
 
       const categoriesData = categoriesResponse.data;
       const tasksData = tasksResponse.data;
 
-      const response = await axios.post('http://localhost:8081/api/export/md',
+      const response = await axiosInstance.post('/api/export/md',
         { categories: categoriesData, tasks: tasksData }, {
         responseType: 'blob'
       });
@@ -134,7 +133,7 @@ function App() {
       window.URL.revokeObjectURL(fileURL);
 
     } catch (err) {
-      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+      const response = err.response ? err.response.data.message : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
         api: response

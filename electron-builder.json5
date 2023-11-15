@@ -3,9 +3,10 @@
  */
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
+  "appId": "Stuff-Todo",
   "asar": true,
-  "productName": "YourAppName",
+  "productName": "Stuff-Todo",
+  "icon": "../public/Stuff-Todo.png",
   "directories": {
     "output": "release/${version}"
   },
@@ -17,6 +18,7 @@
     "target": [
       "dmg"
     ],
+    "category": "Utility",
     "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
   },
   "win": {
@@ -40,6 +42,7 @@
     "target": [
       "AppImage"
     ],
+    "category": "Utility",
     "artifactName": "${productName}-Linux-${version}.${ext}"
   }
 }

@@ -9,8 +9,15 @@ let win: BrowserWindow | null
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
 const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
-function registerGlobalShortcut() {
-  const ret = globalShortcut.register('CommandOrControl+Shift+Alt+I', () => {
+function registerGlobalShortcut(win: BrowserWindow) {
+  let shortcut: string;
+  if (os.platform() === 'darwin') { // macOS
+    shortcut = 'Command+Shift+I';
+  } else { // Windows and Linux
+    shortcut = 'Alt+Shift+I';
+  }
+
+  const ret = globalShortcut.register(shortcut, () => {
     if (win) {
       if (win.isMinimized()) win.restore();
       win.focus();
@@ -18,7 +25,7 @@ function registerGlobalShortcut() {
   });
 
   if (!ret) {
-    console.log('registration failed')
+    console.log('registration failed');
   }
 }
 
@@ -33,12 +40,15 @@ function createWindow() {
     windowWidth = Math.round(width * 0.42);
     windowHeight = Math.round(height * 0.90);
   }
+  if (os.platform() === 'darwin') {
+    windowWidth = Math.round(width * 0.35);
+    windowHeight = Math.round(height * 0.80);
+  }
 
   win = new BrowserWindow({
     width: windowWidth,
     height: windowHeight,
-    transparent: true,
-    icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+    icon: path.join(process.env.VITE_PUBLIC, 'Stuff-Todo.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -77,7 +87,7 @@ app.on('activate', () => {
 
 app.whenReady().then(() => {
   createWindow();
-  registerGlobalShortcut(); // Register the shortcut after the app is ready
+  registerGlobalShortcut(win); // Register the shortcut after the app is ready
 });
 
 app.on('will-quit', () => {

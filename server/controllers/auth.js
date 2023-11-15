@@ -18,9 +18,10 @@ export const register = (req, res) => {
     const q = 'INSERT INTO users (`username`, `email`, `password`) VALUES (?, ?, ?)';
     const values = [req.body.username, req.body.email, hash];
 
-    db.query(q, values, (err) => {
+    db.query(q, values, (err, result) => {
       if (err) return res.status(500).json({ message: 'Server error: Inserting User' });
-      return res.status(200).json({ message: 'User was created.' });
+      const userId = result.insertId;
+      return res.status(200).json({ message: 'User was created. ', userId: userId });
     });
   });
 };

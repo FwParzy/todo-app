@@ -1,9 +1,9 @@
-import axios from 'axios';
 import { useEffect, createContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { User } from '../types/userType';
 import { LoginInputType } from '../types/loginInputType';
 import { EditUserInputType } from '../types/editUserInputType';
+import axiosInstance from './axiosContext';
 
 type AuthContextType = {
   currentUser: User;
@@ -20,17 +20,17 @@ export const AuthContextProvider = ({ children }) => {
   );
 
   const login = async (inputs: LoginInputType) => {
-    const res = await axios.post('http://localhost:8081/api/auth/login', inputs);
+    const res = await axiosInstance.post('/api/auth/login', inputs);
     setCurrentUser(res.data);
   };
 
   const logout = async () => {
-    await axios.post('http://localhost:8081/api/auth/logout');
+    await axiosInstance.post('/api/auth/logout');
     setCurrentUser(null);
   };
 
   const editUser = async (inputs: EditUserInputType) => {
-    const res = await axios.post('http://localhost:8081/api/auth/editUser', inputs);
+    const res = await axiosInstance.post('/api/auth/editUser', inputs);
     setCurrentUser(res.data);
   };
 

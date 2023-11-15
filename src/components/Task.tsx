@@ -2,9 +2,9 @@ import { useContext, useEffect, useRef, useState } from "react";
 import TaskEdit from "./TaskEdit";
 import { TaskType } from "../types/taskTypes";
 import { AuthContext } from "../context/authContext";
-import axios from "axios";
 import { TaskCatValidation, TaskCreateValidation } from "../utils/Validations";
 import "../css/task.css"
+import axiosInstance from "../context/axiosContext";
 
 interface Props {
   task: TaskType;
@@ -79,9 +79,9 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
       || validationErrors.categoryId !== '') return;
 
     try {
-      await axios.post('http://localhost:8081/api/task/updateName', values);
+      await axiosInstance.post('/api/task/updateName', values);
     } catch (err) {
-      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+      const response = err.response ? err.response.data.message : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
         api: response
@@ -98,9 +98,9 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
       || validationErrors.categoryId !== '') return;
 
     try {
-      await axios.post('http://localhost:8081/api/task/deleteOne', values);
+      await axiosInstance.post('/api/task/deleteOne', values);
     } catch (err) {
-      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+      const response = err.response ? err.response.data.message : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
         api: response
@@ -112,9 +112,9 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
 
   const handleTaskClick = async () => {
     try {
-      await axios.post('http://localhost:8081/api/task/complete', values);
+      await axiosInstance.post('/api/task/complete', values);
     } catch (err) {
-      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+      const response = err.response ? err.response.data.message : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
         api: response
@@ -139,9 +139,9 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
     if (validationErrors.categoryId !== '') return;
 
     try {
-      await axios.post('http://localhost:8081/api/task/changeCat', values);
+      await axiosInstance.post('/api/task/changeCat', values);
     } catch (err) {
-      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+      const response = err.response ? err.response.data.message : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
         api: response
@@ -164,7 +164,7 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
               onChange={handleTaskClick}
             />
             <span onClick={handleTaskClick} className="clickable-area" />
-            <span onClick={handleTaskPopup}>{task.name}</span>
+            <span onClick={handleTaskPopup} className="task-text">{task.name}</span>
           </div>
         }
 
