@@ -14,6 +14,7 @@ app.use('/api/cat', catRoutes);
 app.use('/api/task', taskRoutes);
 app.use('/api/export', exportRoutes);
 
-app.listen(8081, () => {
-  console.log("listening")
-})
+const PORT = process.env.PORT || 8081;
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
+});
