@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { CategoryType } from "../types/categoryType";
-import axios from "axios";
 import { AuthContext } from "../context/authContext";
 import Dropdown from 'react-bootstrap/Dropdown';
 import "../css/categoryDropdown.css"
+import axiosInstance from "../context/axiosContext";
 
 interface Props {
   currentCategory: number;
@@ -21,12 +21,12 @@ export const CategoryDropdown = ({ currentCategory, onCategoryChange }: Props) =
   useEffect(() => {
     const fetchCategories = async () => {
       if (currentUser) {
-        axios.get(`http://localhost:8081/api/cat/${currentUser.id}`)
+        axiosInstance.get(`/api/cat/${currentUser.id}`)
           .then(response => {
             setCategories(response.data);
           })
           .catch(err => {
-            const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+            const response = err.response ? err.response.data.message : 'Cannot connect to the server'
             setErrors(prevErrors => ({
               ...prevErrors,
               api: response

@@ -18,9 +18,10 @@ export const create = (req, res) => {
     const insertQuery = 'INSERT INTO categories (`name`, `userId`) VALUES (?, ?)';
     const values = [req.body.name, req.body.userId];
 
-    db.query(insertQuery, values, (err) => {
+    db.query(insertQuery, values, (err, result) => {
       if (err) return res.status(500).json({ message: 'Server error: Inserting Category' });
-      return res.status(200).json({ message: 'Category was created.' });
+      const categoryId = result.insertId;
+      return res.status(200).json({ message: 'Category was created.', categoryId: categoryId });
     });
   });
 };

@@ -4,6 +4,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 contextBridge.exposeInMainWorld('ipcRenderer', withPrototype(ipcRenderer))
 
 // `exposeInMainWorld` can't detect attributes and methods of `prototype`, manually patching it.
+/* eslint-disable @typescript-eslint/no-explicit-any */
 function withPrototype(obj: Record<string, any>) {
   const protos = Object.getPrototypeOf(obj)
 
@@ -12,7 +13,8 @@ function withPrototype(obj: Record<string, any>) {
 
     if (typeof value === 'function') {
       // Some native APIs, like `NodeJS.EventEmitter['on']`, don't work in the Renderer process. Wrapping them into a function.
-      obj[key] = function (...args: any) {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      obj[key] = function(...args: any) {
         return value.call(obj, ...args)
       }
     } else {

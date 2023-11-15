@@ -3,4 +3,4 @@
 /node_modules/
 /server/node_modules/
 /release/
-.env
+.env*

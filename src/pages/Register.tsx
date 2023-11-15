@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { RegistrationValidation } from "../utils/Validations"
-import axios from "axios"
 import "../css/user-forms.css"
+import axiosInstance from "../context/axiosContext"
 
 const Register = () => {
 
@@ -26,6 +26,54 @@ const Register = () => {
     setValues(prev => ({ ...prev, [name]: value }))
   }
 
+  const createTutorial = async (userId: number) => {
+    const tutorialCategories = [
+      {
+        name: 'Tutorial', userId: userId, tasks: [
+          'Welcome to my app! This is a recreation of my favorite notes app',
+          'No need to alt tab to this app to find your notes',
+          'If your on Windows Press \'Alt+Shift+i\' to bring this app in focus',
+          'If your on Mac Press \'Command+Shift+i\' to bring this app in focus'
+        ]
+      },
+      {
+        name: 'This is a Category', userId: userId, tasks: [
+          'This is a Task!',
+          'Click on a Category name to add a Task',
+          'Click on a task\'s circle to complete it',
+          'Completed tasks are deleted at midnight',
+          'Click on a Tasks name to edit your task if you made a mistake',
+          'Clicking the waffle icon to the right of a Category name will let you edit/delete the categories too'
+        ]
+      }
+    ];
+
+    // Create each category
+    for (const category of tutorialCategories) {
+      try {
+        const res = await axiosInstance.post('/api/cat/create', { name: category.name, userId });
+        console.log(res.data)
+        const categoryId = res.data.categoryId;
+
+        // Create tasks for this category
+        for (const taskName of category.tasks) {
+          console.log({
+            name: taskName,
+            userId,
+            categoryId
+          })
+          await axiosInstance.post('/api/task/create', {
+            name: taskName,
+            userId,
+            categoryId
+          });
+        }
+      } catch (err) {
+        console.error('Error creating tutorial category or tasks:', err);
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -38,10 +86,14 @@ const Register = () => {
       || validationErrors.passwordConfirm !== '')
       return;
     try {
-      await axios.post('http://localhost:8081/api/auth/register', values);
+      const res = await axiosInstance.post('/api/auth/register', values);
+      if (res.data.userId) {
+        await createTutorial(res.data.userId);
+      }
+
       navigate('/login');
     } catch (err) {
-      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+      const response = err.response ? err.response.data.message : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
         api: response

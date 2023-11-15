@@ -4,6 +4,7 @@ import { LoginValidation } from "../utils/Validations";
 import { AuthContext } from '../context/authContext';
 import axios from "axios";
 import "../css/user-forms.css"
+import axiosInstance from "../context/axiosContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -31,11 +32,11 @@ const Login = () => {
     if (validationErrors.username !== '' || validationErrors.password !== '') return;
 
     try {
-      await axios.post('http://localhost:8081/api/auth/login', values);
       await login(values);
+      await axiosInstance.post('/api/auth/login', values);
       navigate('/');
     } catch (err) {
-      const response = err.response ? err.response.data.messgae : 'Cannot connect to the server'
+      const response = err.response ? err.response.data.message : 'Cannot connect to the server'
       setErrors(prevErrors => ({
         ...prevErrors,
         api: response

@@ -1,5 +1,5 @@
 export function LoginValidation(values: { username: string, password: string }) {
-  let errors = {
+  const errors = {
     username: '',
     password: '',
     api: ''
@@ -25,7 +25,7 @@ export function LoginValidation(values: { username: string, password: string }) 
 export function RegistrationValidation(values: {
   username: string, email: string, password: string, passwordConfirm: string
 }) {
-  let errors = {
+  const errors = {
     username: '',
     email: '',
     password: '',
@@ -75,7 +75,7 @@ export function EditUserValidation(values: {
   password: string,
   passwordConfirm: string
 }) {
-  let errors = {
+  const errors = {
     username: '',
     email: '',
     password: '',
@@ -120,7 +120,7 @@ export function CategoryCreateValidation(values: {
   name: string,
   userId: number
 }) {
-  let errors = {
+  const errors = {
     name: '',
     userId: '',
     api: ''
@@ -143,7 +143,7 @@ export function TaskCreateValidation(values: {
   userId: number,
   categoryId: number
 }) {
-  let errors = {
+  const errors = {
     name: '',
     userId: '',
     categoryId: '',
@@ -172,7 +172,7 @@ export function TaskCatValidation(values: {
   categoryId: number
   newCatId: number
 }) {
-  let errors = {
+  const errors = {
     categoryId: '',
   };
 
