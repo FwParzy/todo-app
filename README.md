@@ -4,6 +4,7 @@
 ## Initial Settup  
 *Note: i am doing this on Linux, Windows repro will be slightly different and idk how to give repro for that*  
 1. Clone this repo onto your machine and `cd` into the project  
+1. Do `git fetch && git checkout production`
 1. run `npm i` inside the root of the project `todo-app/.`  
 1. Cd into server `cd server` and `npm i`
 1. Cd into the root of the project `cd ..`
@@ -11,6 +12,7 @@
 
 ## Starting the app
 ### Development *Harder* - Dev with Local server
+1. Do `git fetch && git checkout develop`
 1. Make sure you have mysql installed on your machine. For mac or linux run `brew install mysql`
 1. Do `cp server/.env.sample server/.env.dev` and change `DB_USER` and `DB_PASS` to your mysql user and pass
 1. Run `node server/seeders/dbSeeder.js` and enter in your username and password
@@ -18,6 +20,7 @@
 1. Boom done, mess around with it.  
 
 ### Development *Easy* - Dev with Prod server
+1. Do `git fetch && git checkout develop`
 1. Place the file `.env.prod` that I gave you, in `server` next to the other `.env` files
 1. Run `NODE_ENV=prod npm run dev`
 1. Boom done, mess around with it.  
