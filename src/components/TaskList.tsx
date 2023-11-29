@@ -12,17 +12,33 @@ interface Props {
 
 const TaskList = ({ tasks, category, onUpdateTask, onUpdateCategory }: Props) => {
   const [reorderedTasks, setReorderedTasks] = useState<TaskType[]>([]);
+  const [initialized, setInitialized] = useState(false);
 
   // Init reordered tasks to only include current category
   useEffect(() => {
-    console.log('tasks -> ', tasks)
-    //only do this once 
+    const defaultTasks = [{
+      id: 0,
+      categoryId: 0,
+      name: '0',
+      completed: false,
+      createTs: null,
+      cancelTs: null,
+      deleteTs: null
+    }];
+
+    const hasChanged = JSON.stringify(tasks) !== JSON.stringify(defaultTasks);
+    if (!hasChanged) return;
+    if (initialized) return;
+
     setReorderedTasks(tasks.filter(task => category === task.categoryId));
-  }, []);
+    setInitialized(true)
+  }, [tasks]);
 
   const handleReorder = () => {
     console.log(' hihi ')
     console.log(reorderedTasks)
+    // do post here to chnage the affected ordering
+    // then we change the key from task id to task order?
   };
 
   
@@ -32,7 +48,7 @@ const TaskList = ({ tasks, category, onUpdateTask, onUpdateCategory }: Props) =>
       values={reorderedTasks}
       onReorder={setReorderedTasks}
     >
-      {reorderedTasks.filter(task => category === task.categoryId).map((task) => (
+      {reorderedTasks.map((task) => (
         <Task
           key={task.id}
           task={task}
@@ -46,9 +62,6 @@ const TaskList = ({ tasks, category, onUpdateTask, onUpdateCategory }: Props) =>
 };
 
 export default TaskList
-
-
-
     /*
      * Need to add a column that is called order
      * Put reorder.item inside task

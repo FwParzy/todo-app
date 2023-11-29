@@ -36,7 +36,15 @@ const Category = ({ category, onUpdateCategory }: Props) => {
   }
 
   const taskNameRef = useRef<HTMLInputElement>(null)
-  const [tasks, setTasks] = useState<TaskType[]>([]);
+  const [tasks, setTasks] = useState<TaskType[]>([{
+  id: 0,
+  categoryId: 0,
+  name: '0',
+  completed: false,
+  createTs: null,
+  cancelTs: null,
+  deleteTs: null
+}]);
 
   const fetchTasks = () => {
     if (currentUser) {
