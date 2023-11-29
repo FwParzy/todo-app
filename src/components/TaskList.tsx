@@ -1,8 +1,7 @@
 import Task from "./Task";
 import { TaskType } from '../types/taskTypes';
-import { Reorder, motion, useDragControls, useMotionValue} from "framer-motion"
-import { ReactHTML, useEffect, useState } from "react";
-import { useRaisedShadow } from "./use-raised-shadow";
+import { Reorder } from "framer-motion"
+import { useEffect, useState } from "react";
 
 interface Props {
   tasks: TaskType[];
@@ -12,18 +11,43 @@ interface Props {
 }
 
 const TaskList = ({ tasks, category, onUpdateTask, onUpdateCategory }: Props) => {
-const [reorderedTasks, setReorderedTasks] = useState<TaskType[]>([]);
-  const y = useMotionValue(0);
-  const boxShadow = useRaisedShadow(y);
-  const dragControls = useDragControls();
+  const [reorderedTasks, setReorderedTasks] = useState<TaskType[]>([]);
 
+  // Init reordered tasks to only include current category
   useEffect(() => {
+    console.log('tasks -> ', tasks)
+    //only do this once 
     setReorderedTasks(tasks.filter(task => category === task.categoryId));
-  }, [tasks, category]);
+  }, []);
 
-  const handleReorder = (newOrder: TaskType[]) => {
-    setReorderedTasks(newOrder);
-    console.log(newOrder)
+  const handleReorder = () => {
+    console.log(' hihi ')
+    console.log(reorderedTasks)
+  };
+
+  
+  return (
+    <Reorder.Group
+      axis="y"
+      values={reorderedTasks}
+      onReorder={setReorderedTasks}
+    >
+      {reorderedTasks.filter(task => category === task.categoryId).map((task) => (
+        <Task
+          key={task.id}
+          task={task}
+          onUpdateTask={onUpdateTask}
+          onUpdateCategory={onUpdateCategory}
+          handleReorder={handleReorder}
+        />
+      ))}
+    </Reorder.Group>
+  );
+};
+
+export default TaskList
+
+
 
     /*
      * Need to add a column that is called order
@@ -33,22 +57,4 @@ const [reorderedTasks, setReorderedTasks] = useState<TaskType[]>([]);
      * 2 : {id: 25, userId: 1, categoryId: 5, name: 'Better error clearing', completed: 0, …}
      * length : 3
      */
-  };
 
-  return (
-    <Reorder.Group axis="y" values={reorderedTasks} onReorder={handleReorder}>
-      {reorderedTasks.map(task => (
-        <Reorder.Item
-          key={task.id}
-          value={task}
-          style={{ boxShadow, y }}
-          dragControls={dragControls}
-          as={motion.div as undefined as keyof ReactHTML}>
-          <Task task={task} onUpdateTask={onUpdateTask} onUpdateCategory={onUpdateCategory} />
-        </Reorder.Item>
-      ))}
-    </Reorder.Group>
-  );
-};
-
-export default TaskList

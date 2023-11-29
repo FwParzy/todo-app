@@ -1,19 +1,22 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { ReactHTML, useContext, useEffect, useRef, useState } from "react";
 import TaskEdit from "./TaskEdit";
 import { TaskType } from "../types/taskTypes";
 import { AuthContext } from "../context/authContext";
 import { TaskCatValidation, TaskCreateValidation } from "../utils/Validations";
 import "../css/task.css"
 import axiosInstance from "../context/axiosContext";
+import { Reorder, motion, useMotionValue } from "framer-motion";
+import { useRaisedShadow } from "./use-raised-shadow";
 
 interface Props {
   task: TaskType;
   onUpdateTask: () => void;
   onUpdateCategory: () => void;
+  handleReorder: () => void;
 }
 
 
-const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
+const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory, handleReorder }: Props) => {
   const { currentUser } = useContext(AuthContext);
   const [task, setTask] = useState<TaskType>(initialTask);
 
@@ -151,21 +154,32 @@ const Task = ({ task: initialTask, onUpdateTask, onUpdateCategory }: Props) => {
     onUpdateTask()
     handleTaskPopup()
   }
+  const y = useMotionValue(0);
+  const boxShadow = useRaisedShadow(y);
 
   return (
     task.deleteTs === null && (
       <div>
         {!editTaskVisibility &&
-          <div className="circle-checkbox">
-            <input
+          <Reorder.Item
+            key={task.id}
+            value={task}
+            style={{ boxShadow, y }}
+            as={motion.div as undefined as keyof ReactHTML}>
+
+            <div className="circle-checkbox">
+              <input
               type="checkbox"
               checked={!!task.completed}
               id={`task-${task.id}`}
               onChange={handleTaskClick}
             />
-            <span onClick={handleTaskClick} className="clickable-area" />
+            <span onClick={handleTaskClick} className="clickable-area" 
+                onPointerUp={handleReorder}
+              />
             <span onClick={handleTaskPopup} className="task-text">{task.name}</span>
           </div>
+      </Reorder.Item>
         }
 
         {editTaskVisibility &&
